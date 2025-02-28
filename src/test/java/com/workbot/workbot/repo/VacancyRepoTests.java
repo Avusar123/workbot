@@ -188,4 +188,25 @@ public class VacancyRepoTests {
         Assertions.assertEquals(vacancy, newVac);
     }
 
+    @Test
+    void findByFilter_emptyCompany_empty() {
+        var vacancy = new Vacancy(
+                "Test",
+                "Test",
+                "Test",
+                LocalDateTime.now().minusDays(7),
+                Area.IT,
+                Company.BEELINE);
+
+        repo.save(vacancy);
+
+        var filter = new Filter(
+                Set.of("Test2"),
+                Area.IT,
+                Set.of(),
+                LocalDateTime.now().minusDays(8));
+
+        Assertions.assertTrue(repo.findOne(new VacancyByFilterSpecification(filter)).isEmpty());
+    }
+
 }
