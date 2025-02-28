@@ -1,6 +1,6 @@
-package com.workbot.workbot.entry.parse.util;
+package com.workbot.workbot.entry.update.util;
 
-import com.workbot.workbot.entry.parse.section.SectionParser;
+import com.workbot.workbot.entry.update.section.SectionParser;
 import com.workbot.workbot.model.Area;
 import com.workbot.workbot.model.Company;
 import com.workbot.workbot.model.Vacancy;

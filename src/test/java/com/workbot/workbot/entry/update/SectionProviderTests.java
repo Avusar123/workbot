@@ -1,7 +1,7 @@
-package com.workbot.workbot.entry.parse;
+package com.workbot.workbot.entry.update;
 
-import com.workbot.workbot.entry.parse.section.util.SectionProvider;
-import com.workbot.workbot.entry.parse.util.TestSectionParser;
+import com.workbot.workbot.entry.update.section.util.SectionProvider;
+import com.workbot.workbot.entry.update.util.TestSectionParser;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;

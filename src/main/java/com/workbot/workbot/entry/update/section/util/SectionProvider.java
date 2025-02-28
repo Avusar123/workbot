@@ -1,6 +1,6 @@
-package com.workbot.workbot.entry.parse.section.util;
+package com.workbot.workbot.entry.update.section.util;
 
-import com.workbot.workbot.entry.parse.section.SectionParser;
+import com.workbot.workbot.entry.update.section.SectionParser;
 import com.workbot.workbot.model.Area;
 import jakarta.annotation.PostConstruct;
 import org.springframework.beans.factory.annotation.Autowired;

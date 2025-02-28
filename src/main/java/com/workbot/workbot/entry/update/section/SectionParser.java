@@ -1,4 +1,4 @@
-package com.workbot.workbot.entry.parse.section;
+package com.workbot.workbot.entry.update.section;
 
 import com.workbot.workbot.model.Area;
 import com.workbot.workbot.model.Company;
