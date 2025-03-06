@@ -1,16 +1,17 @@
 package com.workbot.workbot.service.vacancy;
 
-import com.workbot.workbot.model.Area;
-import com.workbot.workbot.model.Company;
-import com.workbot.workbot.model.Vacancy;
-import com.workbot.workbot.repo.VacancyRepo;
+import com.workbot.workbot.data.model.Area;
+import com.workbot.workbot.data.model.Company;
+import com.workbot.workbot.data.model.Vacancy;
+import com.workbot.workbot.data.model.dto.VacancyDto;
+import com.workbot.workbot.data.repo.VacancyRepo;
+import com.workbot.workbot.logic.service.vacancy.DefaultVacancyService;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.Mockito;
-import org.mockito.internal.verification.Calls;
 import org.mockito.junit.jupiter.MockitoExtension;
 
 import java.time.LocalDateTime;
@@ -39,7 +40,7 @@ public class DefaultVacancyServiceTests {
     @Test
     void acceptUpdate_success() {
 
-        var newSet = Set.of(new Vacancy(
+        var newSet = Set.of(new VacancyDto(
                 "Test 2",
                 "Test 2",
                 "Test 2",
@@ -47,7 +48,7 @@ public class DefaultVacancyServiceTests {
 
         vacancyService.acceptUpdate(newSet, Area.IT, Company.BEELINE);
 
-        Mockito.verify(vacancyRepo).saveAll(newSet);
+        Mockito.verify(vacancyRepo).saveAll(Mockito.anyCollection());
 
         Mockito.verify(vacancyRepo).deleteAll(new HashSet<>(vacancies));
     }

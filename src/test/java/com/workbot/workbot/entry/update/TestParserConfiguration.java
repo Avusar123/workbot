@@ -1,6 +1,6 @@
 package com.workbot.workbot.entry.update;
 
-import com.workbot.workbot.entry.update.section.util.SectionProvider;
+import com.workbot.workbot.logic.update.section.util.SectionProvider;
 import com.workbot.workbot.entry.update.util.TestSectionParser;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;

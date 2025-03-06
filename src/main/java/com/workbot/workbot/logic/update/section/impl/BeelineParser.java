@@ -1,14 +1,15 @@
-package com.workbot.workbot.entry.update.util;
+package com.workbot.workbot.logic.update.section.impl;
 
 import com.workbot.workbot.logic.update.section.SectionParser;
 import com.workbot.workbot.data.model.Area;
 import com.workbot.workbot.data.model.Company;
 import com.workbot.workbot.data.model.dto.VacancyDto;
+import org.springframework.stereotype.Service;
 
 import java.util.Set;
 
-public class TestSectionParser implements SectionParser {
-
+@Service
+public class BeelineParser implements SectionParser {
     @Override
     public Set<VacancyDto> parse() {
         return Set.of();

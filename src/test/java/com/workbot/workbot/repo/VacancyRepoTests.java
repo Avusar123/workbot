@@ -1,22 +1,20 @@
 package com.workbot.workbot.repo;
 
-import com.workbot.workbot.model.Area;
-import com.workbot.workbot.model.Company;
-import com.workbot.workbot.model.Filter;
-import com.workbot.workbot.model.Vacancy;
-import com.workbot.workbot.repo.criteria.VacancyByFilterSpecification;
+import com.workbot.workbot.data.model.Area;
+import com.workbot.workbot.data.model.Company;
+import com.workbot.workbot.data.model.Vacancy;
+import com.workbot.workbot.data.model.dto.FilterDto;
+import com.workbot.workbot.data.repo.VacancyRepo;
+import com.workbot.workbot.data.repo.criteria.VacancyByFilterSpecification;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
-import org.mockito.Mockito;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.orm.jpa.DataJpaTest;
-import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.test.context.junit.jupiter.SpringExtension;
 
 import java.time.LocalDateTime;
-import java.util.List;
 import java.util.Set;
 
 @DataJpaTest
@@ -55,7 +53,7 @@ public class VacancyRepoTests {
 
         repo.save(vacancy);
 
-        var filter = new Filter(
+        var filter = new FilterDto(
                 Set.of("Test"),
                 Area.IT,
                 Set.of(Company.BEELINE),
@@ -76,7 +74,7 @@ public class VacancyRepoTests {
 
         repo.save(vacancy);
 
-        var filter = new Filter(
+        var filter = new FilterDto(
                 Set.of("Test"),
                 Area.IT,
                 Set.of(Company.BEELINE),
@@ -95,7 +93,7 @@ public class VacancyRepoTests {
 
         repo.save(vacancy);
 
-        var filter = new Filter(
+        var filter = new FilterDto(
                 Set.of("Test"),
                 Area.IT,
                 Set.of(Company.BEELINE),
@@ -116,7 +114,7 @@ public class VacancyRepoTests {
 
         repo.save(vacancy);
 
-        var filter = new Filter(
+        var filter = new FilterDto(
                 Set.of(),
                 Area.IT,
                 Set.of(Company.BEELINE),
@@ -137,7 +135,7 @@ public class VacancyRepoTests {
 
         repo.save(vacancy);
 
-        var filter = new Filter(
+        var filter = new FilterDto(
                 Set.of("Test3"),
                 Area.IT,
                 Set.of(Company.BEELINE),
@@ -156,7 +154,7 @@ public class VacancyRepoTests {
 
         repo.save(vacancy);
 
-        var filter = new Filter(
+        var filter = new FilterDto(
                 Set.of("Test2"),
                 Area.IT,
                 Set.of(Company.BEELINE),
@@ -177,7 +175,7 @@ public class VacancyRepoTests {
 
         repo.save(vacancy);
 
-        var filter = new Filter(
+        var filter = new FilterDto(
                 Set.of("Test2"),
                 Area.IT,
                 Set.of(Company.BEELINE),
@@ -200,7 +198,7 @@ public class VacancyRepoTests {
 
         repo.save(vacancy);
 
-        var filter = new Filter(
+        var filter = new FilterDto(
                 Set.of("Test2"),
                 Area.IT,
                 Set.of(),
