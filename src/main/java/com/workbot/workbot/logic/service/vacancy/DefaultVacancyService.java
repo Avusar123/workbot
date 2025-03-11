@@ -16,11 +16,11 @@ import org.springframework.data.domain.PageRequest;
 import org.springframework.stereotype.Service;
 import org.springframework.validation.annotation.Validated;
 
-
 import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
 import java.util.UUID;
+import java.util.stream.Collectors;
 
 @Service
 @Validated
@@ -49,7 +49,7 @@ public class DefaultVacancyService implements VacancyService {
 
         repo.deleteAll(removedSet);
 
-        publisher.publishEvent(new NewVacanciesEvent(this, newSet));
+        publisher.publishEvent(new NewVacanciesEvent(this, newSet.stream().map(VacancyDto::new).collect(Collectors.toSet())));
     }
 
     @Override

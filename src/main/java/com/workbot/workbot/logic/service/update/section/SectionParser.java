@@ -1,4 +1,4 @@
-package com.workbot.workbot.logic.update.section;
+package com.workbot.workbot.logic.service.update.section;
 
 import com.workbot.workbot.data.model.Area;
 import com.workbot.workbot.data.model.Company;

@@ -5,6 +5,7 @@ import com.workbot.workbot.data.model.Company;
 import com.workbot.workbot.data.model.Filter;
 
 import java.time.LocalDateTime;
+import java.util.Objects;
 import java.util.Set;
 
 public class FilterDto {
@@ -52,5 +53,17 @@ public class FilterDto {
 
     public LocalDateTime getDate() {
         return date;
+    }
+
+    @Override
+    public boolean equals(Object o) {
+        if (o == null || getClass() != o.getClass()) return false;
+        FilterDto filterDto = (FilterDto) o;
+        return Objects.equals(keywords, filterDto.keywords) && area == filterDto.area && Objects.equals(companies, filterDto.companies) && Objects.equals(date, filterDto.date);
+    }
+
+    @Override
+    public int hashCode() {
+        return Objects.hash(keywords, area, companies, date);
     }
 }

@@ -5,6 +5,7 @@ import com.workbot.workbot.data.model.Company;
 import com.workbot.workbot.data.model.Vacancy;
 
 import java.time.LocalDateTime;
+import java.util.Objects;
 import java.util.UUID;
 
 public class VacancyDto {
@@ -67,5 +68,17 @@ public class VacancyDto {
 
     public Company getCompany() {
         return company;
+    }
+
+    @Override
+    public boolean equals(Object o) {
+        if (o == null || getClass() != o.getClass()) return false;
+        VacancyDto that = (VacancyDto) o;
+        return Objects.equals(title, that.title) && Objects.equals(description, that.description) && Objects.equals(link, that.link) && Objects.equals(added, that.added) && area == that.area && company == that.company;
+    }
+
+    @Override
+    public int hashCode() {
+        return Objects.hash(title, description, link, added, area, company);
     }
 }

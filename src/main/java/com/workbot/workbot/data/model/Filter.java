@@ -29,6 +29,10 @@ public class Filter {
         this.date = date;
     }
 
+    protected Filter() {
+
+    }
+
     public int getId() {
         return id;
     }

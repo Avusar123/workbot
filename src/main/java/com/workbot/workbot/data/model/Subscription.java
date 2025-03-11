@@ -21,6 +21,10 @@ public class Subscription {
         this.filter = filter;
     }
 
+    protected Subscription() {
+
+    }
+
     public int getId() {
         return id;
     }

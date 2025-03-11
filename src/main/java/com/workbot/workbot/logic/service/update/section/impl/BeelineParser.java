@@ -1,9 +1,9 @@
-package com.workbot.workbot.logic.update.section.impl;
+package com.workbot.workbot.logic.service.update.section.impl;
 
-import com.workbot.workbot.logic.update.section.SectionParser;
 import com.workbot.workbot.data.model.Area;
 import com.workbot.workbot.data.model.Company;
 import com.workbot.workbot.data.model.dto.VacancyDto;
+import com.workbot.workbot.logic.service.update.section.SectionParser;
 import org.springframework.stereotype.Service;
 
 import java.util.Set;

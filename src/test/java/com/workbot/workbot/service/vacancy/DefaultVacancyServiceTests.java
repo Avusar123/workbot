@@ -13,6 +13,7 @@ import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.Mockito;
 import org.mockito.junit.jupiter.MockitoExtension;
+import org.springframework.context.ApplicationEventPublisher;
 
 import java.time.LocalDateTime;
 import java.util.HashSet;
@@ -23,6 +24,9 @@ import java.util.Set;
 public class DefaultVacancyServiceTests {
     @Mock
     private VacancyRepo vacancyRepo;
+
+    @Mock
+    private ApplicationEventPublisher eventPublisher;
 
     @InjectMocks
     private DefaultVacancyService vacancyService;
@@ -49,6 +53,8 @@ public class DefaultVacancyServiceTests {
         vacancyService.acceptUpdate(newSet, Area.IT, Company.BEELINE);
 
         Mockito.verify(vacancyRepo).saveAll(Mockito.anyCollection());
+
+        Mockito.verify(eventPublisher).publishEvent(Mockito.any());
 
         Mockito.verify(vacancyRepo).deleteAll(new HashSet<>(vacancies));
     }

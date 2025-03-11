@@ -2,6 +2,8 @@ package com.workbot.workbot.data.model.dto;
 
 import com.workbot.workbot.data.model.Subscription;
 
+import java.util.Objects;
+
 public class SubscriptionDto {
     final int id;
 
@@ -32,5 +34,17 @@ public class SubscriptionDto {
 
     public FilterDto getFilter() {
         return filter;
+    }
+
+    @Override
+    public boolean equals(Object o) {
+        if (o == null || getClass() != o.getClass()) return false;
+        SubscriptionDto that = (SubscriptionDto) o;
+        return Objects.equals(title, that.title) && Objects.equals(filter, that.filter);
+    }
+
+    @Override
+    public int hashCode() {
+        return Objects.hash(title, filter);
     }
 }
