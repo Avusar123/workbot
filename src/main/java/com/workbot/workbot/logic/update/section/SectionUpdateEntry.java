@@ -1,7 +1,7 @@
-package com.workbot.workbot.logic.service.update.section;
+package com.workbot.workbot.logic.update.section;
 
-import com.workbot.workbot.logic.service.update.UpdateEntry;
-import com.workbot.workbot.logic.service.update.section.util.SectionProvider;
+import com.workbot.workbot.logic.update.UpdateEntry;
+import com.workbot.workbot.logic.update.section.util.SectionProvider;
 import com.workbot.workbot.logic.service.vacancy.VacancyService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;

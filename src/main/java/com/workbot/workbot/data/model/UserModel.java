@@ -13,4 +13,20 @@ public class UserModel {
 
     @OneToMany(mappedBy = "user")
     List<Subscription> subscriptions;
+
+    public long getId() {
+        return id;
+    }
+
+    public void setId(long id) {
+        this.id = id;
+    }
+
+    public List<Subscription> getSubscriptions() {
+        return subscriptions;
+    }
+
+    public void setSubscriptions(List<Subscription> subscriptions) {
+        this.subscriptions = subscriptions;
+    }
 }

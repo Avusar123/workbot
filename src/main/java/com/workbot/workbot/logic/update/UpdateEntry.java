@@ -1,4 +1,4 @@
-package com.workbot.workbot.logic.service.update;
+package com.workbot.workbot.logic.update;
 
 public interface UpdateEntry {
     void update();

@@ -1,5 +1,6 @@
 package com.workbot.workbot.data.model;
 
+import com.workbot.workbot.data.model.dto.FilterDto;
 import jakarta.persistence.*;
 
 import java.time.LocalDateTime;
@@ -27,6 +28,10 @@ public class Filter {
         this.area = area;
         this.companies = companies;
         this.date = date;
+    }
+
+    public Filter(FilterDto filterDto) {
+        this(filterDto.getKeywords(), filterDto.getArea(), filterDto.getCompanies(), filterDto.getDate());
     }
 
     protected Filter() {

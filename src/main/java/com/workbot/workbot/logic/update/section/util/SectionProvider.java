@@ -1,7 +1,7 @@
-package com.workbot.workbot.logic.service.update.section.util;
+package com.workbot.workbot.logic.update.section.util;
 
 import com.workbot.workbot.data.model.Area;
-import com.workbot.workbot.logic.service.update.section.SectionParser;
+import com.workbot.workbot.logic.update.section.SectionParser;
 import jakarta.annotation.PostConstruct;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.ApplicationContext;

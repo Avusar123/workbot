@@ -11,17 +11,21 @@ public class SubscriptionDto {
 
     final FilterDto filter;
 
+    final long userId;
 
-    public SubscriptionDto(FilterDto filter, String title) {
+
+    public SubscriptionDto(FilterDto filter, String title, long userId) {
         this.filter = filter;
         this.title = title;
+        this.userId = userId;
         this.id = -1;
     }
 
-    public SubscriptionDto(Subscription subscription) {
+    public SubscriptionDto(Subscription subscription, long userId) {
         this.id = subscription.getId();
         this.filter = new FilterDto(subscription.getFilter());
         this.title = subscription.getTitle();
+        this.userId = userId;
     }
 
     public int getId() {
