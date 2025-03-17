@@ -8,6 +8,7 @@ import com.workbot.workbot.data.model.dto.VacancyDto;
 import com.workbot.workbot.data.repo.VacancyRepo;
 import com.workbot.workbot.data.repo.criteria.VacancyByFilterSpecification;
 import com.workbot.workbot.logic.event.NewVacanciesEvent;
+import jakarta.transaction.Transactional;
 import jakarta.validation.constraints.Positive;
 import jakarta.validation.constraints.PositiveOrZero;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -32,6 +33,7 @@ public class DefaultVacancyService implements VacancyService {
     ApplicationEventPublisher publisher;
 
     @Override
+    @Transactional
     public void acceptUpdate(Set<VacancyDto> vacancies, Area area, Company company) {
         var dbVacancies = repo.findAllByAreaAndCompany(area, company);
 

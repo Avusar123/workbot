@@ -1,9 +1,11 @@
 package com.workbot.workbot.data.model;
 
 import jakarta.persistence.Entity;
+import jakarta.persistence.FetchType;
 import jakarta.persistence.Id;
 import jakarta.persistence.OneToMany;
 
+import java.util.ArrayList;
 import java.util.List;
 
 @Entity
@@ -13,6 +15,15 @@ public class UserModel {
 
     @OneToMany(mappedBy = "user")
     List<Subscription> subscriptions;
+
+    public UserModel(long id) {
+        this.id = id;
+        this.subscriptions = new ArrayList<>();
+    }
+
+    protected UserModel() {
+
+    }
 
     public long getId() {
         return id;
