@@ -6,6 +6,7 @@ import com.workbot.workbot.data.model.dto.UserDto;
 import com.workbot.workbot.data.repo.UserRepo;
 import jakarta.transaction.Transactional;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
@@ -30,10 +31,9 @@ public class DefaultUserService implements UserService {
     }
 
     @Override
-    public List<SubscriptionDto> getSubs(long id, int maxOnPage, int page) {
+    public Page<SubscriptionDto> getSubs(long id, int maxOnPage, int page) {
         return userRepo
                 .findSubsByUser(id, PageRequest.of(page, maxOnPage))
-                .map(sub -> new SubscriptionDto(sub, id))
-                .toList();
+                .map(sub -> new SubscriptionDto(sub, id));
     }
 }

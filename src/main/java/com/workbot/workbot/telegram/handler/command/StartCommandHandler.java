@@ -25,7 +25,11 @@ public class StartCommandHandler extends CommandHandler {
                         .builder()
                         .keyboardRow(
                                 new KeyboardRow(
-                                        new KeyboardButton("Подписки"),
+                                        new KeyboardButton("Подписки")
+                                )
+                        )
+                        .keyboardRow(
+                                new KeyboardRow(
                                         new KeyboardButton("Поиск")
                                 )
                         ).build())

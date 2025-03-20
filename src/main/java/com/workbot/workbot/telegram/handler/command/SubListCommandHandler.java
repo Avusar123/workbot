@@ -1,43 +1,106 @@
 package com.workbot.workbot.telegram.handler.command;
 
+import com.workbot.workbot.data.model.dto.SubscriptionDto;
 import com.workbot.workbot.logic.service.user.UserService;
 import com.workbot.workbot.telegram.event.telegram.CallbackRecieved;
 import com.workbot.workbot.telegram.event.telegram.CallbackType;
+import com.workbot.workbot.telegram.event.telegram.PaginationCalledEvent;
 import com.workbot.workbot.telegram.event.telegram.TextMessageRecieved;
-import com.workbot.workbot.telegram.pagination.PageSwitcher;
-import com.workbot.workbot.telegram.pagination.PaginationBuilder;
-import com.workbot.workbot.telegram.pagination.PaginationHelper;
-import com.workbot.workbot.telegram.pagination.PaginationState;
+import com.workbot.workbot.telegram.pagination.PaginationModel;
+import com.workbot.workbot.telegram.pagination.PaginationRepo;
+import com.workbot.workbot.telegram.pagination.PaginationRowBuilder;
+import com.workbot.workbot.telegram.pagination.Paginations;
+import jakarta.transaction.Transactional;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.context.event.EventListener;
 import org.springframework.stereotype.Component;
+import org.telegram.telegrambots.meta.api.methods.ParseMode;
 import org.telegram.telegrambots.meta.api.methods.send.SendMessage;
+import org.telegram.telegrambots.meta.api.methods.updatingmessages.EditMessageReplyMarkup;
+import org.telegram.telegrambots.meta.api.methods.updatingmessages.EditMessageText;
 import org.telegram.telegrambots.meta.api.objects.replykeyboard.InlineKeyboardMarkup;
 import org.telegram.telegrambots.meta.api.objects.replykeyboard.buttons.InlineKeyboardButton;
 import org.telegram.telegrambots.meta.api.objects.replykeyboard.buttons.InlineKeyboardRow;
 import org.telegram.telegrambots.meta.exceptions.TelegramApiException;
-
+import org.springframework.data.domain.Page;
 
 import java.util.ArrayList;
+import java.util.List;
 import java.util.stream.Collectors;
 
 @Component
-public class SubListCommandHandler extends CommandHandler implements PageSwitcher {
+public class SubListCommandHandler extends CommandHandler {
     @Autowired
     private UserService userService;
 
     @Autowired
-    private PaginationHelper paginationHelper;
+    private PaginationRepo paginationRepo;
 
     @Override
     protected void work(TextMessageRecieved event) throws TelegramApiException {
+        paginationListener(new PaginationCalledEvent(
+                this,
+                event.getUpdate(),
+                null,
+                0));
+    }
+
+    @EventListener
+    public void paginationListener(PaginationCalledEvent event) throws TelegramApiException {
         var user = userContextHolder.getCurrent();
 
-        var subs = userService.getSubs(userContextHolder.getId(), 5, 0);
+        var subs = userService.getSubs(userContextHolder.getId(), Paginations.PAGE_SIZE, event.getTargetPage());
 
+        var rows = generateRows(subs);
+
+        if (subs.hasNext() || subs.hasPrevious()) {
+            rows.add(PaginationRowBuilder.from(subs));
+        }
+
+        var model = event.getModel();
+
+        int messageId;
+
+        if (model == null) {
+            model = new PaginationModel("show-subs", event.getTargetPage(), Paginations.PAGE_SIZE);
+
+            var action = buildMessage(
+                    rows,
+                    user.getId(),
+                    (int) subs.getTotalElements(),
+                    event.getTargetPage(),
+                    subs.getTotalPages());
+
+            var result = okHttpTelegramClient.execute(action);
+
+            messageId = result.getMessageId();
+
+        } else {
+            model.setCurrentPage(event.getTargetPage());
+
+            messageId = event.getUpdate().getCallbackQuery().getMessage().getMessageId();
+
+            var action = buildEditMessage(
+                    rows,
+                    user.getId(),
+                    messageId,
+                    (int) subs.getTotalElements(),
+                    event.getTargetPage(),
+                    subs.getTotalPages());
+
+            okHttpTelegramClient.execute(action);
+        }
+
+
+
+        paginationRepo.save(user.getId(), messageId, model);
+    }
+
+    private List<InlineKeyboardRow> generateRows(Page<SubscriptionDto> subs) {
         var buttons = subs.stream().map(
                 sub -> InlineKeyboardButton
                         .builder()
-                        .callbackData(CallbackType.SHOW_SUB.getSerializedText() + sub.getId())
+                        .callbackData(CallbackType.SHOW_SUB + " " + sub.getId())
                         .text(sub.getTitle())
                         .build()
         ).collect(Collectors.toCollection(() -> new ArrayList<InlineKeyboardButton>()));
@@ -45,31 +108,55 @@ public class SubListCommandHandler extends CommandHandler implements PageSwitche
         buttons.add(InlineKeyboardButton
                 .builder()
                 .text("Создать подписку")
-                .callbackData(CallbackType.CREATE_SUB.getSerializedText())
+                .callbackData(CallbackType.CREATE_SUB.toString())
                 .build());
 
-        var rows = buttons.stream().map(
-                InlineKeyboardRow::new).toList();
+        return new ArrayList<>(buttons.stream().map(
+                InlineKeyboardRow::new).toList());
+    }
 
-        rows.add(paginationHelper
-                .inlineRowBuilder()
-                .withCurrent(0)
-                .assignSwitcher(this)
-                .);
-
-        var message = SendMessage
+    private EditMessageText buildEditMessage(List<InlineKeyboardRow> rows,
+                                             long userId,
+                                             int messageId,
+                                             int subsCount,
+                                             int currentPage,
+                                             int totalPage) {
+        return EditMessageText
                 .builder()
-                .chatId(user.getId())
-                .text("Ваши подписки")
+                .chatId(userId)
+                .messageId(messageId)
+                .text(("""
+                        **Ваши подписки**
+                        Всего у вас *%d* подписок
+                        Текущая страница *%d* из *%d*
+                        """).formatted(subsCount, currentPage + 1, totalPage))
+                .parseMode(ParseMode.MARKDOWNV2)
                 .replyMarkup(InlineKeyboardMarkup
                         .builder()
-                        .keyboard(
-
-                        )
+                        .keyboard(rows)
                         .build())
                 .build();
+    }
 
-        okHttpTelegramClient.execute(message);
+    private SendMessage buildMessage(List<InlineKeyboardRow> rows,
+                                     long userId,
+                                     int subsCount,
+                                     int currentPage,
+                                     int totalPage) {
+        return SendMessage
+                .builder()
+                .chatId(userId)
+                .text(("""
+                        **Ваши подписки**
+                        Всего у вас *%d* подписок
+                        Текущая страница *%d* из *%d*
+                        """).formatted(subsCount, currentPage + 1, totalPage))
+                .parseMode(ParseMode.MARKDOWNV2)
+                .replyMarkup(InlineKeyboardMarkup
+                        .builder()
+                        .keyboard(rows)
+                        .build())
+                .build();
     }
 
     @Override
@@ -80,10 +167,5 @@ public class SubListCommandHandler extends CommandHandler implements PageSwitche
     @Override
     protected String getTriggerCommand() {
         return "подписки";
-    }
-
-    @Override
-    public InlineKeyboardMarkup updatePage(PaginationState paginationState, CallbackRecieved event) {
-        return null;
     }
 }

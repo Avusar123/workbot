@@ -26,7 +26,7 @@ public class CallbackRecieved extends TelegramUpdateRecievedEvent {
     }
 
     public boolean hasPayload() {
-        return payload == null;
+        return payload != null && !payload.isEmpty() && !payload.isBlank();
     }
 
     public String getPayload() {

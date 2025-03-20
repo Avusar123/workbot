@@ -1,21 +1,9 @@
 package com.workbot.workbot.telegram.event.telegram;
 
 public enum CallbackType {
-    NEXT_PAGE("NTPG"),
+    PAGINATION_CHANGE,
 
-    PREV_PAGE("PVPG"),
+    SHOW_SUB,
 
-    SHOW_SUB("SHSB"),
-
-    CREATE_SUB("NWSB");
-
-    private final String serializedText;
-
-    CallbackType(String serializedText) {
-        this.serializedText = serializedText;
-    }
-
-    public String getSerializedText() {
-        return serializedText;
-    }
+    CREATE_SUB
 }
