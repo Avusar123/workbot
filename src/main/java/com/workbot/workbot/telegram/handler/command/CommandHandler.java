@@ -1,11 +1,10 @@
 package com.workbot.workbot.telegram.handler.command;
 
+import com.workbot.workbot.telegram.event.telegram.TextMessageRecieved;
 import com.workbot.workbot.telegram.util.UserContextHolder;
-import com.workbot.workbot.telegram.event.TelegramUpdateRecievedEvent;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.event.EventListener;
 import org.telegram.telegrambots.client.okhttp.OkHttpTelegramClient;
-import org.telegram.telegrambots.meta.api.objects.Update;
 import org.telegram.telegrambots.meta.exceptions.TelegramApiException;
 
 public abstract class CommandHandler {
@@ -15,7 +14,7 @@ public abstract class CommandHandler {
     @Autowired
     protected OkHttpTelegramClient okHttpTelegramClient;
 
-    protected abstract void work(Update update) throws TelegramApiException;
+    protected abstract void work(TextMessageRecieved event) throws TelegramApiException;
 
     protected abstract String getTriggerCommand();
 
@@ -24,11 +23,9 @@ public abstract class CommandHandler {
     }
 
     @EventListener
-    public void handleTelegram(TelegramUpdateRecievedEvent telegramUpdateRecievedEvent) throws TelegramApiException {
-        var update = telegramUpdateRecievedEvent.getUpdate();
-
-        if (update.hasMessage() && update.getMessage().hasText() && update.getMessage().getText().toLowerCase().startsWith(getPrefix() + getTriggerCommand())) {
-            work(update);
+    public void handleTelegram(TextMessageRecieved event) throws TelegramApiException {
+        if (event.getText().toLowerCase().startsWith(getPrefix() + getTriggerCommand())) {
+            work(event);
         }
     }
 }

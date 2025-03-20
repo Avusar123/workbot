@@ -1,7 +1,8 @@
 package com.workbot.workbot.telegram;
 
-import com.workbot.workbot.logic.service.user.UserService;
-import com.workbot.workbot.telegram.event.TelegramUpdateRecievedEvent;
+import com.workbot.workbot.telegram.event.telegram.CallbackRecieved;
+import com.workbot.workbot.telegram.event.telegram.CallbackType;
+import com.workbot.workbot.telegram.event.telegram.TextMessageRecieved;
 import com.workbot.workbot.telegram.util.UserContextHolder;
 import com.workbot.workbot.telegram.util.UserProvider;
 import jakarta.annotation.PostConstruct;
@@ -45,10 +46,34 @@ public class TelegramBot implements LongPollingSingleThreadUpdateConsumer {
     public void consume(Update update) {
         try {
              userContextHolder.save(userIdProvider.get(update));
-            eventPublisher.publishEvent(new TelegramUpdateRecievedEvent(this, update));
+
+             publishEvents(update);
+
         } finally {
             userContextHolder.flush();
         }
 
+    }
+
+    private void publishEvents(Update update) {
+        if (update.hasMessage() && update.getMessage().hasText()) {
+            eventPublisher.publishEvent(new TextMessageRecieved(this, update, update.getMessage().getText()));
+        }
+
+        if (update.hasCallbackQuery()) {
+            var data = update.getCallbackQuery().getData();
+
+            var splittedData = data.split(" ", 2);
+
+            var type = CallbackType.valueOf(splittedData[0]);
+
+            String args = null;
+
+            if (splittedData.length > 1) {
+                args = splittedData[1];
+            }
+
+            eventPublisher.publishEvent(new CallbackRecieved(this, update, type, args));
+        }
     }
 }
