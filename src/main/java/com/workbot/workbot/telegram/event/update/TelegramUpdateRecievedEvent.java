@@ -1,4 +1,4 @@
-package com.workbot.workbot.telegram.event.telegram;
+package com.workbot.workbot.telegram.event.update;
 
 import org.springframework.context.ApplicationEvent;
 

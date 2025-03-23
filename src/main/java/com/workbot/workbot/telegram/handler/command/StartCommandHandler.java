@@ -1,6 +1,6 @@
 package com.workbot.workbot.telegram.handler.command;
 
-import com.workbot.workbot.telegram.event.telegram.TextMessageRecieved;
+import com.workbot.workbot.telegram.event.update.TextMessageRecieved;
 import org.springframework.stereotype.Component;
 import org.telegram.telegrambots.meta.api.methods.send.SendMessage;
 import org.telegram.telegrambots.meta.api.objects.replykeyboard.ReplyKeyboardMarkup;

@@ -2,21 +2,18 @@ package com.workbot.workbot.telegram.handler.command;
 
 import com.workbot.workbot.data.model.dto.SubscriptionDto;
 import com.workbot.workbot.logic.service.user.UserService;
-import com.workbot.workbot.telegram.event.telegram.CallbackRecieved;
-import com.workbot.workbot.telegram.event.telegram.CallbackType;
-import com.workbot.workbot.telegram.event.telegram.PaginationCalledEvent;
-import com.workbot.workbot.telegram.event.telegram.TextMessageRecieved;
-import com.workbot.workbot.telegram.pagination.PaginationModel;
-import com.workbot.workbot.telegram.pagination.PaginationRepo;
-import com.workbot.workbot.telegram.pagination.PaginationRowBuilder;
-import com.workbot.workbot.telegram.pagination.Paginations;
-import jakarta.transaction.Transactional;
+import com.workbot.workbot.telegram.cache.repo.PaginationRepo;
+import com.workbot.workbot.telegram.event.update.CallbackType;
+import com.workbot.workbot.telegram.event.cache.PaginationCalledEvent;
+import com.workbot.workbot.telegram.event.update.TextMessageRecieved;
+import com.workbot.workbot.telegram.cache.pagination.PaginationModel;
+import com.workbot.workbot.telegram.cache.pagination.PaginationRowBuilder;
+import com.workbot.workbot.telegram.cache.pagination.Paginations;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.event.EventListener;
 import org.springframework.stereotype.Component;
 import org.telegram.telegrambots.meta.api.methods.ParseMode;
 import org.telegram.telegrambots.meta.api.methods.send.SendMessage;
-import org.telegram.telegrambots.meta.api.methods.updatingmessages.EditMessageReplyMarkup;
 import org.telegram.telegrambots.meta.api.methods.updatingmessages.EditMessageText;
 import org.telegram.telegrambots.meta.api.objects.replykeyboard.InlineKeyboardMarkup;
 import org.telegram.telegrambots.meta.api.objects.replykeyboard.buttons.InlineKeyboardButton;
@@ -90,8 +87,6 @@ public class SubListCommandHandler extends CommandHandler {
 
             okHttpTelegramClient.execute(action);
         }
-
-
 
         paginationRepo.save(user.getId(), messageId, model);
     }

@@ -1,9 +1,8 @@
 package com.workbot.workbot.telegram;
 
-import com.workbot.workbot.telegram.event.telegram.CallbackRecieved;
-import com.workbot.workbot.telegram.event.telegram.CallbackType;
-import com.workbot.workbot.telegram.event.telegram.TextMessageRecieved;
-import com.workbot.workbot.telegram.pagination.PaginationModel;
+import com.workbot.workbot.telegram.event.update.CallbackRecieved;
+import com.workbot.workbot.telegram.event.update.CallbackType;
+import com.workbot.workbot.telegram.event.update.TextMessageRecieved;
 import com.workbot.workbot.telegram.util.UserContextHolder;
 import com.workbot.workbot.telegram.util.UserProvider;
 import jakarta.annotation.PostConstruct;
@@ -18,7 +17,6 @@ import org.telegram.telegrambots.longpolling.util.LongPollingSingleThreadUpdateC
 import org.telegram.telegrambots.meta.api.objects.Update;
 import org.telegram.telegrambots.meta.exceptions.TelegramApiException;
 
-import java.io.*;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.concurrent.locks.ReentrantLock;
@@ -52,18 +50,12 @@ public class TelegramBot implements LongPollingSingleThreadUpdateConsumer {
 
     @Override
     public void consume(Update update) {
-        System.out.println("Начал...");
-
         var user = userIdProvider.get(update);
 
         var lock = lockMap.computeIfAbsent(user.getId(), (_) -> new ReentrantLock());
 
-        System.out.println("Ожидаю разблокировки...");
-
         try {
             lock.lock();
-
-            System.out.println("Забрал блокировку...");
 
             userContextHolder.save(user);
 
@@ -72,8 +64,6 @@ public class TelegramBot implements LongPollingSingleThreadUpdateConsumer {
             userContextHolder.flush();
 
             lock.unlock();
-
-            System.out.println("Окончил работу...");
         }
 
     }

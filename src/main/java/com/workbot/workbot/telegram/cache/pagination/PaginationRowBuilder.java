@@ -1,6 +1,6 @@
-package com.workbot.workbot.telegram.pagination;
+package com.workbot.workbot.telegram.cache.pagination;
 
-import com.workbot.workbot.telegram.event.telegram.CallbackType;
+import com.workbot.workbot.telegram.event.update.CallbackType;
 import org.springframework.data.domain.Page;
 import org.telegram.telegrambots.meta.api.objects.replykeyboard.buttons.InlineKeyboardButton;
 import org.telegram.telegrambots.meta.api.objects.replykeyboard.buttons.InlineKeyboardRow;

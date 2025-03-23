@@ -1,6 +1,8 @@
-package com.workbot.workbot.telegram.event.telegram;
+package com.workbot.workbot.telegram.event.cache;
 
-import com.workbot.workbot.telegram.pagination.PaginationModel;
+import com.workbot.workbot.telegram.cache.pagination.PaginationModel;
+import com.workbot.workbot.telegram.event.update.CallbackRecieved;
+import com.workbot.workbot.telegram.event.update.CallbackType;
 import org.telegram.telegrambots.meta.api.objects.Update;
 
 public class PaginationCalledEvent extends CallbackRecieved {
