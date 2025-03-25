@@ -1,4 +1,4 @@
-package com.workbot.workbot.telegram.util;
+package com.workbot.workbot.telegram.holder;
 
 import com.workbot.workbot.data.model.dto.UserDto;
 import com.workbot.workbot.logic.service.user.UserService;

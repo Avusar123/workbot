@@ -6,7 +6,7 @@ import com.workbot.workbot.telegram.cache.repo.PaginationRepo;
 import com.workbot.workbot.telegram.event.update.CallbackType;
 import com.workbot.workbot.telegram.event.cache.PaginationCalledEvent;
 import com.workbot.workbot.telegram.event.update.TextMessageRecieved;
-import com.workbot.workbot.telegram.cache.pagination.PaginationModel;
+import com.workbot.workbot.telegram.cache.model.PaginationModel;
 import com.workbot.workbot.telegram.cache.pagination.PaginationRowBuilder;
 import com.workbot.workbot.telegram.cache.pagination.Paginations;
 import org.springframework.beans.factory.annotation.Autowired;

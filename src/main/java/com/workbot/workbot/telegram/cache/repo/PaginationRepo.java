@@ -1,6 +1,6 @@
 package com.workbot.workbot.telegram.cache.repo;
 
-import com.workbot.workbot.telegram.cache.pagination.PaginationModel;
+import com.workbot.workbot.telegram.cache.model.PaginationModel;
 import org.springframework.stereotype.Service;
 
 @Service

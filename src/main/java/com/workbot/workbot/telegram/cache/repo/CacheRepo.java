@@ -1,6 +1,5 @@
 package com.workbot.workbot.telegram.cache.repo;
 
-import com.workbot.workbot.telegram.cache.pagination.PaginationModel;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.redis.core.RedisTemplate;
 
@@ -12,6 +11,10 @@ public abstract class CacheRepo<T> {
 
     public void save(long userId, int messageId, T model) {
         redisTemplate.opsForValue().set(generateKey(userId, messageId), model);
+    }
+
+    public boolean contains(long userId, int messageId) {
+        return redisTemplate.hasKey(generateKey(userId, messageId));
     }
 
     public T get(long userId, int messageId) {

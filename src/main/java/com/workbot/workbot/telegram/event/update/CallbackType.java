@@ -5,5 +5,7 @@ public enum CallbackType {
 
     SHOW_SUB,
 
-    CREATE_SUB
+    CREATE_SUB,
+
+    CHOOSE_AREA
 }

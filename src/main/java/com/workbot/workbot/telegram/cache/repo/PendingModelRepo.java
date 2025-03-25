@@ -1,6 +1,6 @@
 package com.workbot.workbot.telegram.cache.repo;
 
-import com.workbot.workbot.telegram.cache.pending.PendingModel;
+import com.workbot.workbot.telegram.cache.model.PendingModel;
 import org.springframework.stereotype.Service;
 
 @Service

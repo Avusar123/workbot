@@ -1,6 +1,5 @@
-package com.workbot.workbot.telegram.cache.pagination;
+package com.workbot.workbot.telegram.cache.model;
 
-import com.workbot.workbot.telegram.cache.CachedActionModel;
 import com.workbot.workbot.telegram.cache.details.CacheDetails;
 
 public class PaginationModel extends CachedActionModel {

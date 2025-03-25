@@ -1,10 +1,13 @@
 package com.workbot.workbot.telegram;
 
+import com.workbot.workbot.data.model.dto.UserDto;
+import com.workbot.workbot.telegram.cache.repo.PendingModelRepo;
 import com.workbot.workbot.telegram.event.update.CallbackRecieved;
 import com.workbot.workbot.telegram.event.update.CallbackType;
 import com.workbot.workbot.telegram.event.update.TextMessageRecieved;
-import com.workbot.workbot.telegram.util.UserContextHolder;
-import com.workbot.workbot.telegram.util.UserProvider;
+import com.workbot.workbot.telegram.holder.PendingContextHolder;
+import com.workbot.workbot.telegram.holder.UserContextHolder;
+import com.workbot.workbot.telegram.holder.UserProvider;
 import jakarta.annotation.PostConstruct;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -36,6 +39,12 @@ public class TelegramBot implements LongPollingSingleThreadUpdateConsumer {
     private UserContextHolder userContextHolder;
 
     @Autowired
+    private PendingContextHolder pendingContextHolder;
+
+    @Autowired
+    private PendingModelRepo pendingModelRepo;
+
+    @Autowired
     private UserProvider userIdProvider;
 
     @Value("${tg.token}")
@@ -57,15 +66,21 @@ public class TelegramBot implements LongPollingSingleThreadUpdateConsumer {
         try {
             lock.lock();
 
-            userContextHolder.save(user);
+            setUserHolder(user);
 
             publishEvents(update);
         } finally {
             userContextHolder.flush();
 
+            pendingContextHolder.flush();
+
             lock.unlock();
         }
 
+    }
+
+    private void setUserHolder(UserDto user) {
+        userContextHolder.save(user);
     }
 
     private void publishEvents(Update update) {
@@ -87,10 +102,22 @@ public class TelegramBot implements LongPollingSingleThreadUpdateConsumer {
                     args = splittedData[1];
                 }
 
+                processPending(update);
+
                 eventPublisher.publishEvent(new CallbackRecieved(this, update, type, args));
             }
         } catch (IllegalArgumentException ex) {
             log.debug("Event was not recognized with IllegalArgumentException");
+        }
+    }
+
+    private void processPending(Update update) {
+        var userId = update.getCallbackQuery().getFrom().getId();
+
+        var messageId = update.getCallbackQuery().getMessage().getMessageId();
+
+        if (pendingModelRepo.contains(userId, messageId)) {
+            pendingContextHolder.save(pendingModelRepo.get(userId, messageId));
         }
     }
 }

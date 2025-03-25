@@ -1,8 +1,6 @@
-package com.workbot.workbot.telegram.util;
+package com.workbot.workbot.telegram.holder;
 
 import com.workbot.workbot.data.model.dto.UserDto;
-import com.workbot.workbot.logic.service.user.UserService;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 @Service

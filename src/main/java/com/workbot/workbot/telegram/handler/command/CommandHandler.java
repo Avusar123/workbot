@@ -1,7 +1,7 @@
 package com.workbot.workbot.telegram.handler.command;
 
 import com.workbot.workbot.telegram.event.update.TextMessageRecieved;
-import com.workbot.workbot.telegram.util.UserContextHolder;
+import com.workbot.workbot.telegram.holder.UserContextHolder;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.event.EventListener;
 import org.telegram.telegrambots.client.okhttp.OkHttpTelegramClient;

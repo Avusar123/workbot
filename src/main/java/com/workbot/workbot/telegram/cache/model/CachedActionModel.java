@@ -1,9 +1,9 @@
-package com.workbot.workbot.telegram.cache;
+package com.workbot.workbot.telegram.cache.model;
 
 import com.fasterxml.jackson.annotation.JsonTypeInfo;
 import com.workbot.workbot.telegram.cache.details.CacheDetails;
+import com.workbot.workbot.telegram.cache.details.EmptyDetails;
 
-import java.io.Serializable;
 @JsonTypeInfo(
         use = JsonTypeInfo.Id.CLASS,
         include = JsonTypeInfo.As.PROPERTY,
@@ -27,12 +27,12 @@ public class CachedActionModel {
     }
 
     public boolean hasDetails() {
-        return actionDetails == null;
+        return actionDetails != null;
     }
 
     public CacheDetails getActionDetails() {
         if (!hasDetails()) {
-            throw new NullPointerException("There is no details");
+            return new EmptyDetails();
         }
         return actionDetails;
     }

@@ -7,10 +7,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.ApplicationContext;
 import org.springframework.stereotype.Service;
 
-import java.util.Collection;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
 import java.util.stream.Collectors;
 
 @Service
@@ -30,6 +27,10 @@ public class SectionProvider {
 
     public List<SectionParser> getAll() {
         return data.values().stream().flatMap(Collection::stream).toList();
+    }
+
+    public Set<Area> getAllAreas() {
+        return data.keySet();
     }
 
     public List<SectionParser> getAll(Area area) {

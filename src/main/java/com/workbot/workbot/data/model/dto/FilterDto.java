@@ -9,15 +9,15 @@ import java.util.Objects;
 import java.util.Set;
 
 public class FilterDto {
-    final int id;
+    int id;
 
-    final Set<String> keywords;
+    Set<String> keywords;
 
-    final Area area;
+    Area area;
 
-    final Set<Company> companies;
+    Set<Company> companies;
 
-    final LocalDateTime date;
+    LocalDateTime date;
 
     public FilterDto(Set<String> keywords, Area area, Set<Company> companies, LocalDateTime date) {
         this.id = -1;
@@ -26,6 +26,8 @@ public class FilterDto {
         this.companies = companies;
         this.date = date;
     }
+
+    public FilterDto() {}
 
     public FilterDto(Filter filter) {
         this.id = filter.getId();

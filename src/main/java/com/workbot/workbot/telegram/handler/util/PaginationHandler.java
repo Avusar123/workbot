@@ -1,4 +1,4 @@
-package com.workbot.workbot.telegram.handler.callback;
+package com.workbot.workbot.telegram.handler.util;
 
 import com.workbot.workbot.telegram.cache.repo.PaginationRepo;
 import com.workbot.workbot.telegram.event.update.CallbackRecieved;
@@ -8,7 +8,6 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.ApplicationEventPublisher;
 import org.springframework.context.event.EventListener;
 import org.springframework.stereotype.Component;
-import org.telegram.telegrambots.client.okhttp.OkHttpTelegramClient;
 
 @Component
 public class PaginationHandler {
@@ -18,12 +17,9 @@ public class PaginationHandler {
     @Autowired
     private ApplicationEventPublisher publisher;
 
-    @Autowired
-    private OkHttpTelegramClient okHttpTelegramClient;
-
-    @EventListener()
+    @EventListener
     public void callbackListener(CallbackRecieved event) {
-        if (event.getType() == CallbackType.PAGINATION_CHANGE && !(event instanceof PaginationCalledEvent)) {
+        if (event.getType() == CallbackType.PAGINATION_CHANGE && event.getClass() == CallbackRecieved.class) {
             var messageId = event.getUpdate().getCallbackQuery().getMessage().getMessageId();
 
             var userId = event.getUpdate().getCallbackQuery().getFrom().getId();
