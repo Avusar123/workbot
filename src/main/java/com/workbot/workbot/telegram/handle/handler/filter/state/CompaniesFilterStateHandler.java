@@ -26,6 +26,7 @@ import org.telegram.telegrambots.meta.api.objects.replykeyboard.buttons.InlineKe
 import org.telegram.telegrambots.meta.exceptions.TelegramApiException;
 
 import java.util.ArrayList;
+import java.util.HashSet;
 import java.util.Set;
 
 @Component
@@ -39,9 +40,11 @@ public class CompaniesFilterStateHandler extends FilterStateHandler {
     @Override
     public void handle(FilterCacheData filterCacheData, MessageUpdateIntent intent) throws TelegramApiException {
         if (intent instanceof CallbackUpdateIntent callbackUpdateIntent) {
-            if (callbackUpdateIntent.getType() == CallbackType.TOGGLE_COMPANY) {
-                var companies = filterCacheData.getFilterDto().getCompanies();
+            var filter = filterCacheData.getFilterDto();
 
+            var companies = filter.getCompanies();
+
+            if (callbackUpdateIntent.getType() == CallbackType.TOGGLE_COMPANY) {
                 var targetCompany = Company.valueOf(callbackUpdateIntent.getArgs());
 
                 if (companies.contains(targetCompany)) {
@@ -49,13 +52,24 @@ public class CompaniesFilterStateHandler extends FilterStateHandler {
                 } else {
                     companies.add(targetCompany);
                 }
-
-                telegramClient.execute(buildMessage(
-                        paginationRepo.get(intent.getUserId(), intent.getMessageId()).getCurrentPage(),
-                        filterCacheData.getFilterDto(),
-                        intent.getUserId(),
-                        intent.getMessageId()));
             }
+
+            if (callbackUpdateIntent.getType() == CallbackType.SELECT_COMPANIES) {
+                var allCompanies = sectionProvider.getAllCompanies(filter.getArea());
+
+                if (companies.size() < allCompanies.size()) {
+                    filter.setCompanies(allCompanies);
+                } else {
+                    filter.setCompanies(new HashSet<>());
+                }
+            }
+
+            telegramClient.execute(buildMessage(
+                    paginationRepo.get(intent.getUserId(), intent.getMessageId()).getCurrentPage(),
+                    filterCacheData.getFilterDto(),
+                    intent.getUserId(),
+                    intent.getMessageId()));
+
         } else if (intent instanceof PaginationUpdateIntent paginationUpdateIntent) {
             telegramClient.execute(buildMessage(
                     paginationUpdateIntent.getTargetPage(),
@@ -97,6 +111,16 @@ public class CompaniesFilterStateHandler extends FilterStateHandler {
 
         contentRows.add(
                 paginationRow
+        );
+
+        contentRows.add(
+                new InlineKeyboardRow(
+                        InlineKeyboardButton
+                                .builder()
+                                .text((selected.size() == companies.getTotalElements() ? "✅ " : "") + "Выбрать все")
+                                .callbackData(CallbackType.SELECT_COMPANIES.toString())
+                                .build()
+                )
         );
 
         return new InlineKeyboardMarkup(contentRows);

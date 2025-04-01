@@ -38,7 +38,7 @@ public class SectionProvider {
         return data.getOrDefault(area, List.of());
     }
 
-    public List<Company> getAllCompanies(Area area) {
-        return getAll(area).stream().map(SectionParser::getCompany).toList();
+    public Set<Company> getAllCompanies(Area area) {
+        return getAll(area).stream().map(SectionParser::getCompany).collect(Collectors.toSet());
     }
 }

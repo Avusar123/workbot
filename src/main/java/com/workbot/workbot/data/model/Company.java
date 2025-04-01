@@ -1,7 +1,12 @@
 package com.workbot.workbot.data.model;
 
 public enum Company {
-    BEELINE("Билайн");
+    BEELINE("Билайн"),
+    TINKOFF("Т-Банк"),
+    CINEMAX("Синемакс"),
+    CROK("КРОК"),
+    MTC("МТС"),
+    SBER("Сбер");
 
     private final String displayName;
 

@@ -5,5 +5,5 @@ public enum CallbackType {
     SHOW_SUB,
     CREATE_SUB,
     CHOOSE_AREA,
-    TOGGLE_COMPANY
+    SELECT_COMPANIES, TOGGLE_COMPANY
 }
