@@ -1,6 +1,7 @@
 package com.workbot.workbot.logic.update.section.util;
 
 import com.workbot.workbot.data.model.Area;
+import com.workbot.workbot.data.model.Company;
 import com.workbot.workbot.logic.update.section.SectionParser;
 import jakarta.annotation.PostConstruct;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -35,5 +36,9 @@ public class SectionProvider {
 
     public List<SectionParser> getAll(Area area) {
         return data.getOrDefault(area, List.of());
+    }
+
+    public List<Company> getAllCompanies(Area area) {
+        return getAll(area).stream().map(SectionParser::getCompany).toList();
     }
 }

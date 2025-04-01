@@ -1,9 +1,9 @@
 package com.workbot.workbot.telegram;
 
-import com.workbot.workbot.telegram.newapi.process.UpdateProcessor;
-import com.workbot.workbot.telegram.newapi.setup.context.UpdateContext;
-import com.workbot.workbot.telegram.newapi.setup.context.UpdateContextHolder;
-import com.workbot.workbot.telegram.newapi.setup.extractor.Extractor;
+import com.workbot.workbot.telegram.process.UpdateProcessor;
+import com.workbot.workbot.telegram.setup.context.UpdateContext;
+import com.workbot.workbot.telegram.setup.context.UpdateContextHolder;
+import com.workbot.workbot.telegram.setup.extractor.Extractor;
 import jakarta.annotation.PostConstruct;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;

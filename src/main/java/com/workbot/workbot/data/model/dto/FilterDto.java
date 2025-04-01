@@ -5,6 +5,7 @@ import com.workbot.workbot.data.model.Company;
 import com.workbot.workbot.data.model.Filter;
 
 import java.time.LocalDateTime;
+import java.util.HashSet;
 import java.util.Objects;
 import java.util.Set;
 
@@ -27,7 +28,10 @@ public class FilterDto {
         this.date = date;
     }
 
-    public FilterDto() {}
+    public FilterDto() {
+        companies = new HashSet<>();
+        keywords = new HashSet<>();
+    }
 
     public FilterDto(Filter filter) {
         this.id = filter.getId();
@@ -67,5 +71,21 @@ public class FilterDto {
     @Override
     public int hashCode() {
         return Objects.hash(keywords, area, companies, date);
+    }
+
+    public void setKeywords(Set<String> keywords) {
+        this.keywords = keywords;
+    }
+
+    public void setArea(Area area) {
+        this.area = area;
+    }
+
+    public void setCompanies(Set<Company> companies) {
+        this.companies = companies;
+    }
+
+    public void setDate(LocalDateTime date) {
+        this.date = date;
     }
 }
