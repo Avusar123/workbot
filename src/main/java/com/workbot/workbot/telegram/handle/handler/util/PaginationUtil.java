@@ -8,7 +8,7 @@ import org.telegram.telegrambots.meta.api.objects.replykeyboard.buttons.InlineKe
 import java.util.ArrayList;
 import java.util.List;
 
-public class PaginationUtil {
+public final class PaginationUtil {
     private PaginationUtil() {}
 
     public static final int PAGE_SIZE = 5;

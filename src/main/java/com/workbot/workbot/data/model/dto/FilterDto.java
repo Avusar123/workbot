@@ -20,14 +20,6 @@ public class FilterDto {
 
     LocalDateTime date;
 
-    public FilterDto(Set<String> keywords, Area area, Set<Company> companies, LocalDateTime date) {
-        this.id = -1;
-        this.keywords = keywords;
-        this.area = area;
-        this.companies = companies;
-        this.date = date;
-    }
-
     public FilterDto() {
         companies = new HashSet<>();
         keywords = new HashSet<>();
@@ -35,9 +27,9 @@ public class FilterDto {
 
     public FilterDto(Filter filter) {
         this.id = filter.getId();
-        this.keywords = filter.getKeywords();
+        this.keywords = new HashSet<>(filter.getKeywords());
         this.area = filter.getArea();
-        this.companies = filter.getCompanies();
+        this.companies = new HashSet<>(filter.getCompanies());
         this.date = filter.getDate();
     }
 

@@ -1,5 +1,7 @@
 package com.workbot.workbot.telegram.setup.config;
 
+import com.fasterxml.jackson.databind.ObjectMapper;
+import com.fasterxml.jackson.datatype.jsr310.JavaTimeModule;
 import com.workbot.workbot.telegram.setup.context.data.CacheData;
 import com.workbot.workbot.telegram.setup.redis.PaginationContext;
 import jakarta.persistence.criteria.CriteriaBuilder;
@@ -37,11 +39,15 @@ public class RedisConfig {
         RedisTemplate<String, T> template = new RedisTemplate<>();
         template.setConnectionFactory(connectionFactory);
 
+        var objectMapper = new ObjectMapper();
+
+        objectMapper.registerModule(new JavaTimeModule());
+
         template.setKeySerializer(new StringRedisSerializer());
         template.setHashKeySerializer(new StringRedisSerializer());
 
-        template.setValueSerializer(new Jackson2JsonRedisSerializer<>(valueObject));
-        template.setHashValueSerializer(new Jackson2JsonRedisSerializer<>(valueObject));
+        template.setValueSerializer(new Jackson2JsonRedisSerializer<>(objectMapper, valueObject));
+        template.setHashValueSerializer(new Jackson2JsonRedisSerializer<>(objectMapper, valueObject));
 
         template.afterPropertiesSet();
 

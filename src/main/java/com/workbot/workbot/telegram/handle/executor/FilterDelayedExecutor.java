@@ -6,6 +6,7 @@ import com.workbot.workbot.telegram.setup.context.data.DelegatedCacheData;
 import com.workbot.workbot.telegram.setup.context.data.FilterCacheData;
 import com.workbot.workbot.telegram.setup.intent.DelegatedMessageUpdateIntent;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.core.annotation.Order;
 import org.springframework.stereotype.Service;
 import org.telegram.telegrambots.meta.exceptions.TelegramApiException;
 

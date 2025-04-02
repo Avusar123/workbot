@@ -25,7 +25,7 @@ public abstract class RedisRepo<T> {
         return redisTemplate.opsForValue().get(key);
     }
 
-    private String generateKey(long userId, int messageId) {
+    protected String generateKey(long userId, int messageId) {
         return userId + ":" + messageId + ":" + postfix();
     }
 }

@@ -28,6 +28,7 @@ public class DefaultUserService implements UserService {
     }
 
     @Override
+    @Transactional
     public Page<SubscriptionDto> getSubs(long id, int maxOnPage, int page) {
         return userRepo
                 .findSubsByUser(id, PageRequest.of(page, maxOnPage))

@@ -1,5 +1,7 @@
 package com.workbot.workbot.telegram.handle.handler.filter.state;
 
+import com.workbot.workbot.telegram.handle.handler.filter.FilterState;
+import com.workbot.workbot.telegram.handle.handler.util.CancelUtil;
 import com.workbot.workbot.telegram.setup.context.data.FilterCacheData;
 import com.workbot.workbot.telegram.setup.intent.CallbackUpdateIntent;
 import com.workbot.workbot.telegram.setup.intent.DelegatedMessageUpdateIntent;
@@ -61,18 +63,10 @@ public class KeywordsFilterStateHandler extends FilterStateHandler {
 
             chatDelegatedMessagesRepo.save(intent.getUserId(), result.getMessageId());
 
-        } else if (intent instanceof CallbackUpdateIntent callbackUpdateIntent
-                && callbackUpdateIntent.getType() == CallbackType.CANCEL_FILTER) {
+        } else if (intent instanceof CallbackUpdateIntent callbackUpdateIntent && callbackUpdateIntent.getType() == CallbackType.CONFIRM_KEYWORDS) {
             chatDelegatedMessagesRepo.flush(callbackUpdateIntent.getUserId());
 
-            EditMessageText editMessageText = EditMessageText
-                    .builder()
-                    .text("Действие успешно отменено!")
-                    .messageId(callbackUpdateIntent.getMessageId())
-                    .chatId(callbackUpdateIntent.getUserId())
-                    .build();
-
-            telegramClient.execute(editMessageText);
+            stateSwitcher.switchState(FilterState.DATE, filterCacheData, intent);
         }
     }
 
@@ -116,13 +110,7 @@ public class KeywordsFilterStateHandler extends FilterStateHandler {
                                         .callbackData(CallbackType.CONFIRM_KEYWORDS.toString())
                                         .build()
                         ),
-                        new InlineKeyboardRow(
-                                InlineKeyboardButton
-                                        .builder()
-                                        .text("\uD83D\uDEAB Отмена создания")
-                                        .callbackData(CallbackType.CANCEL_FILTER.toString())
-                                        .build()
-                        )
+                        CancelUtil.createCancelRow()
                 )
         );
     }

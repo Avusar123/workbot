@@ -8,7 +8,9 @@ import java.util.List;
 public interface SubService {
     List<SubscriptionDto> getAllBy(VacancyDto vacancy);
 
-    void add(SubscriptionDto sub);
+    int add(SubscriptionDto sub);
+
+    SubscriptionDto get(int id, long userId);
 
     void delete(int id);
 }

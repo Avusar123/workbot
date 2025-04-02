@@ -1,25 +1,25 @@
 package com.workbot.workbot.telegram.handle.executor;
 
-import com.workbot.workbot.telegram.handle.handler.CreateSubHandler;
+import com.workbot.workbot.telegram.handle.handler.CancelOperationHandler;
 import com.workbot.workbot.telegram.setup.intent.CallbackUpdateIntent;
 import com.workbot.workbot.telegram.setup.intent.type.CallbackType;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.stereotype.Component;
+import org.springframework.stereotype.Service;
 import org.telegram.telegrambots.meta.exceptions.TelegramApiException;
 
-@Component
-public class CreateSubExecutor implements HandlerExecutor<CallbackUpdateIntent> {
+@Service
+public class CancelFilterExecutor implements HandlerExecutor<CallbackUpdateIntent> {
     @Autowired
-    private CreateSubHandler createSubHandler;
+    private CancelOperationHandler cancelOperationHandler;
 
     @Override
     public boolean supports(CallbackUpdateIntent intent) {
-        return intent.getType() == CallbackType.CREATE_SUB;
+        return intent.getType() == CallbackType.CANCEL_FILTER;
     }
 
     @Override
     public void execute(CallbackUpdateIntent intent) throws TelegramApiException {
-        createSubHandler.init(intent);
+        cancelOperationHandler.cancel(intent.getUserId(), intent.getMessageId());
     }
 
     @Override
