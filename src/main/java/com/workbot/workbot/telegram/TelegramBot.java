@@ -1,16 +1,12 @@
 package com.workbot.workbot.telegram;
 
-import com.workbot.workbot.telegram.event.update.CallbackRecieved;
-import com.workbot.workbot.telegram.event.update.CallbackType;
-import com.workbot.workbot.telegram.event.update.TextMessageRecieved;
-import com.workbot.workbot.telegram.util.UserContextHolder;
-import com.workbot.workbot.telegram.util.UserProvider;
+import com.workbot.workbot.telegram.process.UpdateProcessor;
+import com.workbot.workbot.telegram.setup.context.UpdateContext;
+import com.workbot.workbot.telegram.setup.context.UpdateContextHolder;
+import com.workbot.workbot.telegram.setup.extractor.Extractor;
 import jakarta.annotation.PostConstruct;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
-import org.springframework.context.ApplicationEventPublisher;
 import org.springframework.stereotype.Service;
 import org.telegram.telegrambots.longpolling.TelegramBotsLongPollingApplication;
 import org.telegram.telegrambots.longpolling.util.LongPollingSingleThreadUpdateConsumer;
@@ -23,20 +19,17 @@ import java.util.concurrent.locks.ReentrantLock;
 
 @Service
 public class TelegramBot implements LongPollingSingleThreadUpdateConsumer {
-
-    private static final Logger log = LoggerFactory.getLogger(TelegramBot.class);
-
     @Autowired
     private TelegramBotsLongPollingApplication longPollingApplication;
 
     @Autowired
-    private ApplicationEventPublisher eventPublisher;
+    private Extractor<UpdateContext> contextExtractor;
 
     @Autowired
-    private UserContextHolder userContextHolder;
+    private UpdateProcessor updateProcessor;
 
     @Autowired
-    private UserProvider userIdProvider;
+    private UpdateContextHolder contextHolder;
 
     @Value("${tg.token}")
     private String token;
@@ -50,47 +43,24 @@ public class TelegramBot implements LongPollingSingleThreadUpdateConsumer {
 
     @Override
     public void consume(Update update) {
-        var user = userIdProvider.get(update);
+        var context = contextExtractor.extract(update);
 
-        var lock = lockMap.computeIfAbsent(user.getId(), (_) -> new ReentrantLock());
+        var lock = lockMap.computeIfAbsent(context.user().getId(), (k) -> new ReentrantLock());
+
+        contextHolder.set(context);
 
         try {
             lock.lock();
 
-            userContextHolder.save(user);
+            updateProcessor.process(update);
 
-            publishEvents(update);
+        } catch (TelegramApiException e) {
+            throw new RuntimeException(e);
         } finally {
-            userContextHolder.flush();
+            contextHolder.flush();
 
             lock.unlock();
         }
 
-    }
-
-    private void publishEvents(Update update) {
-        try {
-            if (update.hasMessage() && update.getMessage().hasText()) {
-                eventPublisher.publishEvent(new TextMessageRecieved(this, update, update.getMessage().getText()));
-            }
-
-            if (update.hasCallbackQuery()) {
-                var data = update.getCallbackQuery().getData();
-
-                var splittedData = data.split(" ", 2);
-
-                var type = CallbackType.valueOf(splittedData[0]);
-
-                String args = null;
-
-                if (splittedData.length > 1) {
-                    args = splittedData[1];
-                }
-
-                eventPublisher.publishEvent(new CallbackRecieved(this, update, type, args));
-            }
-        } catch (IllegalArgumentException ex) {
-            log.debug("Event was not recognized with IllegalArgumentException");
-        }
     }
 }

@@ -49,7 +49,6 @@ public class Vacancy {
         this.added = dto.getAdded();
         this.area = dto.getArea();
         this.company = dto.getCompany();
-
     }
 
 

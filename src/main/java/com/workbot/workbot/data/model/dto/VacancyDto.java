@@ -3,6 +3,7 @@ package com.workbot.workbot.data.model.dto;
 import com.workbot.workbot.data.model.Area;
 import com.workbot.workbot.data.model.Company;
 import com.workbot.workbot.data.model.Vacancy;
+import com.workbot.workbot.telegram.handle.handler.util.FormatUtil;
 
 import java.time.LocalDateTime;
 import java.util.Objects;
@@ -35,8 +36,9 @@ public class VacancyDto {
 
     public VacancyDto(Vacancy vacancy) {
         this.id = vacancy.getId();
-        this.title = vacancy.getTitle();
+        this.title = FormatUtil.escapeMarkdownV2(vacancy.getTitle());
         this.description = vacancy.getDescription();
+        this.company = vacancy.getCompany();
         this.link = vacancy.getLink();
         this.added = vacancy.getAdded();
         this.area = vacancy.getArea();

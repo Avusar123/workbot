@@ -1,0 +1,9 @@
+package com.workbot.workbot.telegram.setup.intent.type;
+
+public enum CallbackType {
+    PAGINATION,
+    SHOW_SUB,
+    CREATE_SUB,
+    CHOOSE_AREA,
+    SELECT_COMPANIES, CONFIRM_COMPANIES, CONFIRM_KEYWORDS, CANCEL_FILTER, CHOOSE_DATE, CONFIRM_FILTER, DELETE_SUB, SHOW_SUB_NEW, INIT_SEARCH, TOGGLE_COMPANY
+}

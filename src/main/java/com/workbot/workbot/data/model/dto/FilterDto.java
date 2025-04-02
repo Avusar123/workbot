@@ -5,33 +5,31 @@ import com.workbot.workbot.data.model.Company;
 import com.workbot.workbot.data.model.Filter;
 
 import java.time.LocalDateTime;
+import java.util.HashSet;
 import java.util.Objects;
 import java.util.Set;
 
 public class FilterDto {
-    final int id;
+    int id;
 
-    final Set<String> keywords;
+    Set<String> keywords;
 
-    final Area area;
+    Area area;
 
-    final Set<Company> companies;
+    Set<Company> companies;
 
-    final LocalDateTime date;
+    LocalDateTime date;
 
-    public FilterDto(Set<String> keywords, Area area, Set<Company> companies, LocalDateTime date) {
-        this.id = -1;
-        this.keywords = keywords;
-        this.area = area;
-        this.companies = companies;
-        this.date = date;
+    public FilterDto() {
+        companies = new HashSet<>();
+        keywords = new HashSet<>();
     }
 
     public FilterDto(Filter filter) {
         this.id = filter.getId();
-        this.keywords = filter.getKeywords();
+        this.keywords = new HashSet<>(filter.getKeywords());
         this.area = filter.getArea();
-        this.companies = filter.getCompanies();
+        this.companies = new HashSet<>(filter.getCompanies());
         this.date = filter.getDate();
     }
 
@@ -65,5 +63,21 @@ public class FilterDto {
     @Override
     public int hashCode() {
         return Objects.hash(keywords, area, companies, date);
+    }
+
+    public void setKeywords(Set<String> keywords) {
+        this.keywords = keywords;
+    }
+
+    public void setArea(Area area) {
+        this.area = area;
+    }
+
+    public void setCompanies(Set<Company> companies) {
+        this.companies = companies;
+    }
+
+    public void setDate(LocalDateTime date) {
+        this.date = date;
     }
 }

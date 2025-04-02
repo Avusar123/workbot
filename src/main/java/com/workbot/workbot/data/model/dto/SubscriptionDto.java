@@ -5,21 +5,20 @@ import com.workbot.workbot.data.model.Subscription;
 import java.util.Objects;
 
 public class SubscriptionDto {
-    final int id;
+    int id;
 
-    final String title;
+    String title;
 
-    final FilterDto filter;
+    FilterDto filter;
 
-    final long userId;
+    long userId;
 
-
-    public SubscriptionDto(FilterDto filter, String title, long userId) {
+    public SubscriptionDto(FilterDto filter) {
         this.filter = filter;
-        this.title = title;
-        this.userId = userId;
-        this.id = -1;
+        this.userId = -1;
     }
+
+    protected SubscriptionDto() {}
 
     public SubscriptionDto(Subscription subscription, long userId) {
         this.id = subscription.getId();
@@ -50,5 +49,17 @@ public class SubscriptionDto {
     @Override
     public int hashCode() {
         return Objects.hash(title, filter);
+    }
+
+    public void setTitle(String title) {
+        this.title = title;
+    }
+
+    public void setUserId(long userId) {
+        this.userId = userId;
+    }
+
+    public long getUserId() {
+        return userId;
     }
 }
