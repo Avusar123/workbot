@@ -30,7 +30,8 @@ public class CallbackIntentExtractor implements Extractor<CallbackUpdateIntent> 
                 update.getCallbackQuery().getMessage().getMessageId(),
                 update.getCallbackQuery().getFrom().getId(),
                 type,
-                args
+                args,
+                update.getCallbackQuery().getId()
         );
     }
 }

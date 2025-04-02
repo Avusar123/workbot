@@ -7,11 +7,14 @@ public class CallbackUpdateIntent extends MessageUpdateIntent {
 
     private final String args;
 
+    private String queryId;
+
     public CallbackUpdateIntent(int messageId,
-                                long userId, CallbackType type, String args) {
+                                long userId, CallbackType type, String args, String queryId) {
         super(messageId, userId);
         this.type = type;
         this.args = args;
+        this.queryId = queryId;
     }
 
     public String getArgs() {
@@ -20,5 +23,9 @@ public class CallbackUpdateIntent extends MessageUpdateIntent {
 
     public CallbackType getType() {
         return type;
+    }
+
+    public String getQueryId() {
+        return queryId;
     }
 }

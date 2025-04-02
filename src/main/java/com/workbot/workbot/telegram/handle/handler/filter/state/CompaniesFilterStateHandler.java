@@ -4,6 +4,7 @@ import com.workbot.workbot.data.model.Area;
 import com.workbot.workbot.data.model.Company;
 import com.workbot.workbot.data.model.dto.FilterDto;
 import com.workbot.workbot.logic.update.section.util.SectionProvider;
+import com.workbot.workbot.telegram.handle.handler.filter.FilterState;
 import com.workbot.workbot.telegram.handle.handler.util.PaginationUtil;
 import com.workbot.workbot.telegram.setup.context.data.FilterCacheData;
 import com.workbot.workbot.telegram.setup.intent.CallbackUpdateIntent;
@@ -18,7 +19,9 @@ import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageImpl;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.stereotype.Component;
+import org.telegram.telegrambots.meta.api.methods.AnswerCallbackQuery;
 import org.telegram.telegrambots.meta.api.methods.ParseMode;
+import org.telegram.telegrambots.meta.api.methods.updatingmessages.EditMessageReplyMarkup;
 import org.telegram.telegrambots.meta.api.methods.updatingmessages.EditMessageText;
 import org.telegram.telegrambots.meta.api.objects.replykeyboard.InlineKeyboardMarkup;
 import org.telegram.telegrambots.meta.api.objects.replykeyboard.buttons.InlineKeyboardButton;
@@ -44,24 +47,40 @@ public class CompaniesFilterStateHandler extends FilterStateHandler {
 
             var companies = filter.getCompanies();
 
-            if (callbackUpdateIntent.getType() == CallbackType.TOGGLE_COMPANY) {
-                var targetCompany = Company.valueOf(callbackUpdateIntent.getArgs());
+            switch (callbackUpdateIntent.getType()) {
+                case CallbackType.TOGGLE_COMPANY:
+                    var targetCompany = Company.valueOf(callbackUpdateIntent.getArgs());
 
-                if (companies.contains(targetCompany)) {
-                    companies.remove(targetCompany);
-                } else {
-                    companies.add(targetCompany);
-                }
-            }
+                    if (companies.contains(targetCompany)) {
+                        companies.remove(targetCompany);
+                    } else {
+                        companies.add(targetCompany);
+                    }
 
-            if (callbackUpdateIntent.getType() == CallbackType.SELECT_COMPANIES) {
-                var allCompanies = sectionProvider.getAllCompanies(filter.getArea());
+                    break;
+                case CallbackType.SELECT_COMPANIES:
+                    var allCompanies = sectionProvider.getAllCompanies(filter.getArea());
 
-                if (companies.size() < allCompanies.size()) {
-                    filter.setCompanies(allCompanies);
-                } else {
-                    filter.setCompanies(new HashSet<>());
-                }
+                    if (companies.size() < allCompanies.size()) {
+                        filter.setCompanies(allCompanies);
+                    } else {
+                        filter.setCompanies(new HashSet<>());
+                    }
+
+                    break;
+                case CallbackType.CONFIRM_COMPANIES:
+                    if (companies.isEmpty()) {
+                        AnswerCallbackQuery answerCallbackQuery = new AnswerCallbackQuery(callbackUpdateIntent.getQueryId());
+                        answerCallbackQuery.setText("Необходимо выбрать хоть одну компанию!");
+
+                        telegramClient.execute(answerCallbackQuery);
+
+                        return;
+                    }
+
+                    stateSwitcher.switchState(FilterState.KEYWORDS, filterCacheData, intent);
+
+                    return;
             }
 
             telegramClient.execute(buildMessage(
@@ -119,6 +138,16 @@ public class CompaniesFilterStateHandler extends FilterStateHandler {
                                 .builder()
                                 .text((selected.size() == companies.getTotalElements() ? "✅ " : "") + "Выбрать все")
                                 .callbackData(CallbackType.SELECT_COMPANIES.toString())
+                                .build()
+                )
+        );
+
+        contentRows.add(
+                new InlineKeyboardRow(
+                        InlineKeyboardButton
+                                .builder()
+                                .text("Подтвердить выбор")
+                                .callbackData(CallbackType.CONFIRM_COMPANIES.toString())
                                 .build()
                 )
         );

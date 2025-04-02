@@ -2,6 +2,7 @@ package com.workbot.workbot.telegram.setup.config;
 
 import com.workbot.workbot.telegram.setup.context.data.CacheData;
 import com.workbot.workbot.telegram.setup.redis.PaginationContext;
+import jakarta.persistence.criteria.CriteriaBuilder;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.data.redis.connection.RedisConnectionFactory;
@@ -19,6 +20,17 @@ public class RedisConfig {
     @Bean
     public RedisTemplate<String, PaginationContext> paginationContextRedisTemplate(RedisConnectionFactory connectionFactory) {
         return templateFromClass(connectionFactory, PaginationContext.class);
+    }
+
+    @Bean
+    public RedisTemplate<String , Integer> ChatDelegatedMessagesRepo(RedisConnectionFactory connectionFactory) {
+        var redisTemplate = new RedisTemplate<String, Integer>();
+
+        redisTemplate.setConnectionFactory(connectionFactory);
+
+        redisTemplate.afterPropertiesSet();
+
+        return redisTemplate;
     }
 
     private <T> RedisTemplate<String, T> templateFromClass(RedisConnectionFactory connectionFactory, Class<T> valueObject) {
