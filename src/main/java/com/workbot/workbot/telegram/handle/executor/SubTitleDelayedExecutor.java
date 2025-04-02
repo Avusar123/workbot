@@ -31,8 +31,7 @@ public class SubTitleDelayedExecutor implements HandlerExecutor<DelegatedMessage
         createSubHandler.processTitle(
                 ((TextMessageUpdateIntent) intent.getInner()).getText(),
                 (SubCacheData) ((DelegatedCacheData) updateContextHolder.get().cacheData()).getInner(),
-                intent.getUserId(),
-                intent.getSourceMessageId());
+                intent.getUserId());
     }
 
     @Override

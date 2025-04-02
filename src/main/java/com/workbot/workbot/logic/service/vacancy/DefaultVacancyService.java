@@ -8,14 +8,20 @@ import com.workbot.workbot.data.model.dto.VacancyDto;
 import com.workbot.workbot.data.repo.VacancyRepo;
 import com.workbot.workbot.data.repo.criteria.VacancyByFilterSpecification;
 import com.workbot.workbot.logic.event.NewVacanciesEvent;
+import com.workbot.workbot.telegram.process.ExternalProcessor;
+import com.workbot.workbot.telegram.setup.event.CustomIntentEvent;
+import com.workbot.workbot.telegram.setup.intent.VacanciesUpdateIntent;
 import jakarta.transaction.Transactional;
 import jakarta.validation.constraints.Positive;
 import jakarta.validation.constraints.PositiveOrZero;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.ApplicationEventPublisher;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageImpl;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.stereotype.Service;
 import org.springframework.validation.annotation.Validated;
+import org.telegram.telegrambots.meta.exceptions.TelegramApiException;
 
 import java.util.HashSet;
 import java.util.List;
@@ -30,7 +36,7 @@ public class DefaultVacancyService implements VacancyService {
     VacancyRepo repo;
 
     @Autowired
-    ApplicationEventPublisher publisher;
+    private ApplicationEventPublisher eventPublisher;
 
     @Override
     @Transactional
@@ -51,19 +57,33 @@ public class DefaultVacancyService implements VacancyService {
 
         repo.deleteAll(removedSet);
 
-        publisher.publishEvent(new NewVacanciesEvent(this, newSet.stream().map(VacancyDto::new).collect(Collectors.toSet())));
+        eventPublisher.publishEvent(new CustomIntentEvent(
+                this,
+                new VacanciesUpdateIntent(
+                        newSet
+                                .stream()
+                                .map(VacancyDto::new)
+                                .collect(Collectors.toSet()),
+                        removedSet
+                                .stream()
+                                .map(VacancyDto::new)
+                                .collect(Collectors.toSet()))));
     }
 
     @Override
-    public List<VacancyDto> getAllBy(FilterDto filter,
+    public Page<VacancyDto> getAllBy(FilterDto filter,
                                      @Positive int maxOnPage, @PositiveOrZero int page) {
-        return repo.findAll(
+        var vacancies = repo.findAll(
                 new VacancyByFilterSpecification(filter),
-                PageRequest.of(page, maxOnPage))
-                    .getContent()
-                    .stream()
-                    .map(VacancyDto::new)
-                    .toList();
+                PageRequest.of(page, maxOnPage)
+        );
+
+        List<VacancyDto> vacancyDtos = vacancies.getContent()
+                .stream()
+                .map(VacancyDto::new)
+                .toList();
+
+        return new PageImpl<>(vacancyDtos, PageRequest.of(page, maxOnPage), vacancies.getTotalElements());
     }
 
     @Override

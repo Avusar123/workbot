@@ -69,7 +69,7 @@ public class CreateSubHandler {
         chatDelegatedMessagesRepo.save(userId, messageId);
     }
 
-    public void processTitle(String title, SubCacheData subCacheData, long userId, int sourceMessageId) throws TelegramApiException {
+    public void processTitle(String title, SubCacheData subCacheData, long userId) throws TelegramApiException {
         title = FormatUtil.escapeMarkdownV2(title.trim());
 
         if (title.length() > 24) {

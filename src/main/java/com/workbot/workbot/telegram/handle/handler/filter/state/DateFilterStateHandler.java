@@ -72,14 +72,14 @@ public class DateFilterStateHandler extends FilterStateHandler {
                                                 new InlineKeyboardRow(
                                                         InlineKeyboardButton
                                                                 .builder()
-                                                                .text("Полгода (180 дней от текущей")
+                                                                .text("Полгода (180 дней от текущей)")
                                                                 .callbackData(CallbackType.CHOOSE_DATE + " " + 180 * 24)
                                                                 .build()
                                                 ),
                                                 new InlineKeyboardRow(
                                                         InlineKeyboardButton
                                                                 .builder()
-                                                                .text("Год (360 дней от текущей")
+                                                                .text("Год (360 дней от текущей)")
                                                                 .callbackData(CallbackType.CHOOSE_DATE + " " + 360 * 24)
                                                                 .build()
                                                 )
