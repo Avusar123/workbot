@@ -18,7 +18,7 @@ public class SectionUpdateEntry implements UpdateEntry {
     VacancyService vacancyService;
 
     @Override
-    @Scheduled(fixedRate = 60000)
+    @Scheduled(fixedRate = 60000 * 60)
     public void update() {
         var parsers = provider.getAll();
 

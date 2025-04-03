@@ -89,7 +89,11 @@ public class SearchHandler {
 
             EditMessageText message = EditMessageText
                     .builder()
-                    .text(VacancyUtil.formatVacancy(vacancy))
+                    .text("""
+                            *Результаты поиска*
+                            %s
+                            Страница %d из %d
+                            """.formatted(VacancyUtil.formatVacancy(vacancy), result.getNumber() + 1, result.getTotalPages()))
                     .replyMarkup(
                             new InlineKeyboardMarkup(
                                     rows

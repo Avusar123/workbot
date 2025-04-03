@@ -7,8 +7,6 @@ import com.workbot.workbot.data.model.dto.FilterDto;
 import com.workbot.workbot.data.model.dto.VacancyDto;
 import com.workbot.workbot.data.repo.VacancyRepo;
 import com.workbot.workbot.data.repo.criteria.VacancyByFilterSpecification;
-import com.workbot.workbot.logic.event.NewVacanciesEvent;
-import com.workbot.workbot.telegram.process.ExternalProcessor;
 import com.workbot.workbot.telegram.setup.event.CustomIntentEvent;
 import com.workbot.workbot.telegram.setup.intent.VacanciesUpdateIntent;
 import jakarta.transaction.Transactional;

@@ -40,4 +40,9 @@ public class TelegramSafeString {
     public int hashCode() {
         return Objects.hashCode(content);
     }
+
+    @Override
+    public String toString() {
+        return getFormatted();
+    }
 }

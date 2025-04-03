@@ -14,6 +14,8 @@ public class Vacancy {
 
     String title;
 
+    @Lob
+    @Column(columnDefinition = "TEXT")
     String description;
 
     String link;

@@ -45,8 +45,7 @@ public class VacancyByFilterSpecification implements Specification<Vacancy> {
                                         .like(criteriaBuilder
                                                 .lower(root.get("title")), pattern);
                 Predicate descLike = criteriaBuilder
-                                        .like(criteriaBuilder
-                                                .lower(root.get("description")), pattern);
+                                        .like(root.get("description"), pattern);
                 keywordPredicates.add(criteriaBuilder.or(titleLike, descLike));
             }
 

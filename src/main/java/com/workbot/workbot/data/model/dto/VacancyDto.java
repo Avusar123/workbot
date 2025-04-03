@@ -26,7 +26,7 @@ public class VacancyDto {
 
     public VacancyDto(String title, String description, String link, LocalDateTime added, Area area, Company company) {
         this.title = new TelegramSafeString(title);
-        this.description = new TelegramSafeString(description);
+        this.description = new TelegramSafeString(description.toLowerCase());
         this.link = link;
         this.added = added;
         this.area = area;
@@ -37,7 +37,7 @@ public class VacancyDto {
     public VacancyDto(Vacancy vacancy) {
         this.id = vacancy.getId();
         this.title = new TelegramSafeString(vacancy.getTitle());
-        this.description = new TelegramSafeString(vacancy.getDescription());
+        this.description = new TelegramSafeString(vacancy.getDescription().toLowerCase());
         this.company = vacancy.getCompany();
         this.link = vacancy.getLink();
         this.added = vacancy.getAdded();
@@ -76,11 +76,11 @@ public class VacancyDto {
     public boolean equals(Object o) {
         if (o == null || getClass() != o.getClass()) return false;
         VacancyDto that = (VacancyDto) o;
-        return Objects.equals(title, that.title) && Objects.equals(description, that.description) && Objects.equals(link, that.link) && Objects.equals(added, that.added) && area == that.area && company == that.company;
+        return Objects.equals(title, that.title) && Objects.equals(description, that.description) && Objects.equals(link, that.link) && area == that.area && company == that.company;
     }
 
     @Override
     public int hashCode() {
-        return Objects.hash(title, description, link, added, area, company);
+        return Objects.hash(title, description, link, area, company);
     }
 }
