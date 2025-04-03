@@ -39,33 +39,23 @@ public class DefaultVacancyService implements VacancyService {
     @Override
     @Transactional
     public void acceptUpdate(Set<VacancyDto> vacancies, Area area, Company company) {
-        var dbVacancies = repo.findAllByAreaAndCompany(area, company);
+        var dbVacancies = repo.findAllByAreaAndCompany(area, company).stream().map(VacancyDto::new).toList();
 
-        var convVac = vacancies.stream().map(Vacancy::new).toList();
-
-        var newSet = new HashSet<>(convVac);
+        var newSet = new HashSet<>(vacancies);
 
         var removedSet = new HashSet<>(dbVacancies);
 
         newSet.removeAll(removedSet);
 
-        removedSet.removeAll(newSet);
+        removedSet.removeAll(vacancies);
 
-        repo.saveAll(newSet);
+        repo.saveAll(newSet.stream().map(Vacancy::new).toList());
 
-        repo.deleteAll(removedSet);
+        repo.deleteAllById(removedSet.stream().map(VacancyDto::getId).toList());
 
         eventPublisher.publishEvent(new CustomIntentEvent(
                 this,
-                new VacanciesUpdateIntent(
-                        newSet
-                                .stream()
-                                .map(VacancyDto::new)
-                                .collect(Collectors.toSet()),
-                        removedSet
-                                .stream()
-                                .map(VacancyDto::new)
-                                .collect(Collectors.toSet()))));
+                new VacanciesUpdateIntent(newSet, removedSet)));
     }
 
     @Override
