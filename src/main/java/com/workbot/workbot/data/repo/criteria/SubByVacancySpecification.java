@@ -41,9 +41,9 @@ public class SubByVacancySpecification implements Specification<Subscription> {
                             criteriaBuilder.equal(filterRoot, uniteFilter),
                             criteriaBuilder.or(
                                     criteriaBuilder.isNull(joinedRoot),
-                                    criteriaBuilder.like(criteriaBuilder.lower(criteriaBuilder.literal(vacancy.getTitle())),
+                                    criteriaBuilder.like(criteriaBuilder.lower(criteriaBuilder.literal(vacancy.getTitle().getUnsafe())),
                                             criteriaBuilder.concat("%", criteriaBuilder.concat(criteriaBuilder.lower(joinedRoot), "%"))),
-                                    criteriaBuilder.like(criteriaBuilder.lower(criteriaBuilder.literal(vacancy.getDescription())),
+                                    criteriaBuilder.like(criteriaBuilder.lower(criteriaBuilder.literal(vacancy.getDescription().getUnsafe())),
                                             criteriaBuilder.concat("%", criteriaBuilder.concat(criteriaBuilder.lower(joinedRoot), "%")))
                             )
                     )

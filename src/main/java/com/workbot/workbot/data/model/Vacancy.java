@@ -43,8 +43,8 @@ public class Vacancy {
     }
 
     public Vacancy(VacancyDto dto) {
-        this.title = dto.getTitle();
-        this.description = dto.getDescription();
+        this.title = dto.getTitle().getUnsafe();
+        this.description = dto.getDescription().getUnsafe();
         this.link = dto.getLink();
         this.added = dto.getAdded();
         this.area = dto.getArea();

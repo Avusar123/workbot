@@ -1,10 +1,12 @@
 package com.workbot.workbot.data.model;
 
 import com.workbot.workbot.data.model.dto.FilterDto;
+import com.workbot.workbot.data.model.dto.util.TelegramSafeString;
 import jakarta.persistence.*;
 
 import java.time.LocalDateTime;
 import java.util.Set;
+import java.util.stream.Collectors;
 
 @Entity
 public class Filter {
@@ -31,7 +33,11 @@ public class Filter {
     }
 
     public Filter(FilterDto filterDto) {
-        this(filterDto.getKeywords(), filterDto.getArea(), filterDto.getCompanies(), filterDto.getDate());
+        this(filterDto
+                .getKeywords()
+                .stream()
+                .map(TelegramSafeString::getUnsafe)
+                .collect(Collectors.toSet()), filterDto.getArea(), filterDto.getCompanies(), filterDto.getDate());
     }
 
     protected Filter() {

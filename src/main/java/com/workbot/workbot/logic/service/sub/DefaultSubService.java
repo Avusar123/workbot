@@ -38,7 +38,7 @@ public class DefaultSubService implements SubService {
             throw new IllegalArgumentException("UserId must be set!");
         }
 
-        var dbSub = new Subscription(sub.getTitle(), new Filter(sub.getFilter()));
+        var dbSub = new Subscription(sub.getTitle().getUnsafe(), new Filter(sub.getFilter()));
 
         var user = userRepo.findById(sub.getUserId()).orElseThrow();
 

@@ -15,13 +15,17 @@ import org.springframework.data.redis.serializer.StringRedisSerializer;
 @Configuration
 public class RedisConfig {
     @Bean
-    public RedisTemplate<String, CacheData> cacheDataRedisTemplate(RedisConnectionFactory connectionFactory) {
-        return templateFromClass(connectionFactory, CacheData.class);
+    public RedisTemplate<String, CacheData> cacheDataRedisTemplate(
+            RedisConnectionFactory connectionFactory,
+            ObjectMapper mapper) {
+        return templateFromClass(connectionFactory, CacheData.class, mapper);
     }
 
     @Bean
-    public RedisTemplate<String, PaginationContext> paginationContextRedisTemplate(RedisConnectionFactory connectionFactory) {
-        return templateFromClass(connectionFactory, PaginationContext.class);
+    public RedisTemplate<String, PaginationContext> paginationContextRedisTemplate(
+            RedisConnectionFactory connectionFactory,
+            ObjectMapper mapper) {
+        return templateFromClass(connectionFactory, PaginationContext.class, mapper);
     }
 
     @Bean
@@ -35,19 +39,17 @@ public class RedisConfig {
         return redisTemplate;
     }
 
-    private <T> RedisTemplate<String, T> templateFromClass(RedisConnectionFactory connectionFactory, Class<T> valueObject) {
+    private <T> RedisTemplate<String, T> templateFromClass(RedisConnectionFactory connectionFactory,
+                                                           Class<T> valueObject,
+                                                           ObjectMapper mapper) {
         RedisTemplate<String, T> template = new RedisTemplate<>();
         template.setConnectionFactory(connectionFactory);
-
-        var objectMapper = new ObjectMapper();
-
-        objectMapper.registerModule(new JavaTimeModule());
 
         template.setKeySerializer(new StringRedisSerializer());
         template.setHashKeySerializer(new StringRedisSerializer());
 
-        template.setValueSerializer(new Jackson2JsonRedisSerializer<>(objectMapper, valueObject));
-        template.setHashValueSerializer(new Jackson2JsonRedisSerializer<>(objectMapper, valueObject));
+        template.setValueSerializer(new Jackson2JsonRedisSerializer<>(mapper, valueObject));
+        template.setHashValueSerializer(new Jackson2JsonRedisSerializer<>(mapper, valueObject));
 
         template.afterPropertiesSet();
 

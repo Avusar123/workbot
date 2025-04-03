@@ -3,16 +3,18 @@ package com.workbot.workbot.data.model.dto;
 import com.workbot.workbot.data.model.Area;
 import com.workbot.workbot.data.model.Company;
 import com.workbot.workbot.data.model.Filter;
+import com.workbot.workbot.data.model.dto.util.TelegramSafeString;
 
 import java.time.LocalDateTime;
 import java.util.HashSet;
 import java.util.Objects;
 import java.util.Set;
+import java.util.stream.Collectors;
 
 public class FilterDto {
     int id;
 
-    Set<String> keywords;
+    Set<TelegramSafeString> keywords;
 
     Area area;
 
@@ -27,7 +29,8 @@ public class FilterDto {
 
     public FilterDto(Filter filter) {
         this.id = filter.getId();
-        this.keywords = new HashSet<>(filter.getKeywords());
+        this.keywords = filter.getKeywords().stream().map(TelegramSafeString::new)
+                .collect(Collectors.toCollection(HashSet::new));
         this.area = filter.getArea();
         this.companies = new HashSet<>(filter.getCompanies());
         this.date = filter.getDate();
@@ -37,7 +40,7 @@ public class FilterDto {
         return id;
     }
 
-    public Set<String> getKeywords() {
+    public Set<TelegramSafeString> getKeywords() {
         return keywords;
     }
 
@@ -66,7 +69,7 @@ public class FilterDto {
     }
 
     public void setKeywords(Set<String> keywords) {
-        this.keywords = keywords;
+        this.keywords = keywords.stream().map(TelegramSafeString::new).collect(Collectors.toSet());
     }
 
     public void setArea(Area area) {

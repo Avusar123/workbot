@@ -2,7 +2,6 @@ package com.workbot.workbot.telegram.handle.handler;
 
 import com.workbot.workbot.data.model.dto.VacancyDto;
 import com.workbot.workbot.logic.service.sub.SubService;
-import com.workbot.workbot.telegram.handle.handler.util.FormatUtil;
 import com.workbot.workbot.telegram.handle.handler.util.VacancyUtil;
 import com.workbot.workbot.telegram.setup.intent.type.CallbackType;
 import org.slf4j.Logger;
@@ -18,7 +17,6 @@ import org.telegram.telegrambots.meta.api.objects.replykeyboard.buttons.InlineKe
 import org.telegram.telegrambots.meta.exceptions.TelegramApiException;
 
 import java.util.ArrayList;
-import java.util.Collections;
 
 @Component
 public class NewVacancyHandler {

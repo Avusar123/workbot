@@ -1,12 +1,10 @@
 package com.workbot.workbot.telegram.handle.handler;
 
-import com.workbot.workbot.data.model.Subscription;
 import com.workbot.workbot.data.model.dto.FilterDto;
 import com.workbot.workbot.data.model.dto.SubscriptionDto;
 import com.workbot.workbot.logic.service.sub.SubService;
 import com.workbot.workbot.telegram.handle.handler.filter.FilterHandler;
 import com.workbot.workbot.telegram.handle.handler.util.CancelUtil;
-import com.workbot.workbot.telegram.handle.handler.util.FormatUtil;
 import com.workbot.workbot.telegram.setup.context.data.SubCacheData;
 import com.workbot.workbot.telegram.setup.intent.MessageUpdateIntent;
 import com.workbot.workbot.telegram.setup.intent.type.HandlerType;
@@ -70,7 +68,7 @@ public class CreateSubHandler {
     }
 
     public void processTitle(String title, SubCacheData subCacheData, long userId) throws TelegramApiException {
-        title = FormatUtil.escapeMarkdownV2(title.trim());
+        title = title.trim();
 
         if (title.length() > 24) {
             telegramClient.execute(

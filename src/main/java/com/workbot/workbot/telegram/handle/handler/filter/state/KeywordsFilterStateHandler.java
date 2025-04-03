@@ -1,8 +1,8 @@
 package com.workbot.workbot.telegram.handle.handler.filter.state;
 
+import com.workbot.workbot.data.model.dto.util.TelegramSafeString;
 import com.workbot.workbot.telegram.handle.handler.filter.FilterState;
 import com.workbot.workbot.telegram.handle.handler.util.CancelUtil;
-import com.workbot.workbot.telegram.handle.handler.util.FormatUtil;
 import com.workbot.workbot.telegram.setup.context.data.FilterCacheData;
 import com.workbot.workbot.telegram.setup.intent.CallbackUpdateIntent;
 import com.workbot.workbot.telegram.setup.intent.DelegatedMessageUpdateIntent;
@@ -141,7 +141,7 @@ public class KeywordsFilterStateHandler extends FilterStateHandler {
         for (var keyword : keywords) {
             stringBuilder.append(i).append("\\. ");
 
-            stringBuilder.append(FormatUtil.escapeMarkdownV2(keyword));
+            stringBuilder.append(TelegramSafeString.escapeMarkdownV2(keyword));
 
             stringBuilder.append("\n");
 

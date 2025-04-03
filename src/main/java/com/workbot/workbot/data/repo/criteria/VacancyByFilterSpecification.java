@@ -2,6 +2,7 @@ package com.workbot.workbot.data.repo.criteria;
 
 import com.workbot.workbot.data.model.Vacancy;
 import com.workbot.workbot.data.model.dto.FilterDto;
+import com.workbot.workbot.data.model.dto.util.TelegramSafeString;
 import jakarta.persistence.criteria.CriteriaBuilder;
 import jakarta.persistence.criteria.CriteriaQuery;
 import jakarta.persistence.criteria.Predicate;
@@ -10,6 +11,7 @@ import org.springframework.data.jpa.domain.Specification;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.stream.Collectors;
 
 public class VacancyByFilterSpecification implements Specification<Vacancy> {
     private final FilterDto filter;
@@ -31,9 +33,13 @@ public class VacancyByFilterSpecification implements Specification<Vacancy> {
                 criteriaBuilder.greaterThanOrEqualTo(root.get("added"), filter.getDate())
         );
 
-        if (!filter.getKeywords().isEmpty()) {
+        var keywords = filter.getKeywords().stream().map(
+                TelegramSafeString::getUnsafe
+        ).collect(Collectors.toSet());
+
+        if (!keywords.isEmpty()) {
             List<Predicate> keywordPredicates = new ArrayList<>();
-            for (String keyword : filter.getKeywords()) {
+            for (String keyword : keywords) {
                 String pattern = "%" + keyword.toLowerCase() + "%";
                 Predicate titleLike = criteriaBuilder
                                         .like(criteriaBuilder

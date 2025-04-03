@@ -88,7 +88,7 @@ public class SubListHandler {
                 sub -> new InlineKeyboardRow(
                         InlineKeyboardButton
                                 .builder()
-                                .text(sub.getTitle())
+                                .text(sub.getTitle().getFormatted())
                                 .callbackData(CallbackType.SHOW_SUB + " " + sub.getId())
                                 .build()
                 )

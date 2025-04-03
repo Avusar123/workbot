@@ -21,7 +21,7 @@ public final class VacancyUtil {
                 *Была добавлена* %s \\(Это %d дней назад\\)
                 """.formatted(vacancyDto.getArea(),
                 vacancyDto.getCompany().getDisplayName(),
-                vacancyDto.getTitle(),
+                vacancyDto.getTitle().getFormatted(),
                 vacancyDto.getAdded().format(DateTimeFormatter.ofPattern("dd:MM:yyyy")),
                 ChronoUnit.DAYS.between(vacancyDto.getAdded(), LocalDateTime.now()));
     }

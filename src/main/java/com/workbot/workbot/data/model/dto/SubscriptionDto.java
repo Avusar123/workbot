@@ -1,13 +1,14 @@
 package com.workbot.workbot.data.model.dto;
 
 import com.workbot.workbot.data.model.Subscription;
+import com.workbot.workbot.data.model.dto.util.TelegramSafeString;
 
 import java.util.Objects;
 
 public class SubscriptionDto {
     int id;
 
-    String title;
+    TelegramSafeString title;
 
     FilterDto filter;
 
@@ -23,7 +24,7 @@ public class SubscriptionDto {
     public SubscriptionDto(Subscription subscription, long userId) {
         this.id = subscription.getId();
         this.filter = new FilterDto(subscription.getFilter());
-        this.title = subscription.getTitle();
+        this.title = new TelegramSafeString(subscription.getTitle());
         this.userId = userId;
     }
 
@@ -31,7 +32,7 @@ public class SubscriptionDto {
         return id;
     }
 
-    public String getTitle() {
+    public TelegramSafeString getTitle() {
         return title;
     }
 
@@ -52,7 +53,7 @@ public class SubscriptionDto {
     }
 
     public void setTitle(String title) {
-        this.title = title;
+        this.title = new TelegramSafeString(title);
     }
 
     public void setUserId(long userId) {

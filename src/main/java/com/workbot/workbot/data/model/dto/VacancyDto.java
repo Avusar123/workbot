@@ -3,7 +3,7 @@ package com.workbot.workbot.data.model.dto;
 import com.workbot.workbot.data.model.Area;
 import com.workbot.workbot.data.model.Company;
 import com.workbot.workbot.data.model.Vacancy;
-import com.workbot.workbot.telegram.handle.handler.util.FormatUtil;
+import com.workbot.workbot.data.model.dto.util.TelegramSafeString;
 
 import java.time.LocalDateTime;
 import java.util.Objects;
@@ -12,9 +12,9 @@ import java.util.UUID;
 public class VacancyDto {
     final UUID id;
 
-    final String title;
+    final TelegramSafeString title;
 
-    final String description;
+    final TelegramSafeString description;
 
     final String link;
 
@@ -25,8 +25,8 @@ public class VacancyDto {
     Company company;
 
     public VacancyDto(String title, String description, String link, LocalDateTime added, Area area, Company company) {
-        this.title = title;
-        this.description = description;
+        this.title = new TelegramSafeString(title);
+        this.description = new TelegramSafeString(description);
         this.link = link;
         this.added = added;
         this.area = area;
@@ -36,8 +36,8 @@ public class VacancyDto {
 
     public VacancyDto(Vacancy vacancy) {
         this.id = vacancy.getId();
-        this.title = FormatUtil.escapeMarkdownV2(vacancy.getTitle());
-        this.description = vacancy.getDescription();
+        this.title = new TelegramSafeString(vacancy.getTitle());
+        this.description = new TelegramSafeString(vacancy.getDescription());
         this.company = vacancy.getCompany();
         this.link = vacancy.getLink();
         this.added = vacancy.getAdded();
@@ -48,11 +48,11 @@ public class VacancyDto {
         return id;
     }
 
-    public String getTitle() {
+    public TelegramSafeString getTitle() {
         return title;
     }
 
-    public String getDescription() {
+    public TelegramSafeString getDescription() {
         return description;
     }
 
