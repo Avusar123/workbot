@@ -169,7 +169,7 @@ public class VacancyRepoTests {
     void findByFilter_onlyInDesc_empty() {
         var vacancy = new Vacancy(
                 "Test3",
-                "Test2",
+                "test2",
                 "Test",
                 LocalDateTime.now().minusDays(7), Area.IT, Company.BEELINE);
 

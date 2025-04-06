@@ -56,6 +56,6 @@ public class DefaultVacancyServiceTests {
 
         Mockito.verify(eventPublisher).publishEvent(Mockito.any());
 
-        Mockito.verify(vacancyRepo).deleteAll(new HashSet<>(vacancies));
+        Mockito.verify(vacancyRepo).deleteAllById(new HashSet<>(vacancies).stream().map(Vacancy::getId).toList());
     }
 }

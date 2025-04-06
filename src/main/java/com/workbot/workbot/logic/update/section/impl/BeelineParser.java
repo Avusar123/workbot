@@ -6,6 +6,8 @@ import com.workbot.workbot.data.model.Area;
 import com.workbot.workbot.data.model.Company;
 import com.workbot.workbot.data.model.dto.VacancyDto;
 import com.workbot.workbot.logic.update.section.SectionParser;
+import com.workbot.workbot.logic.update.section.util.HttpConstants;
+import com.workbot.workbot.logic.update.section.util.ParserException;
 import okhttp3.OkHttpClient;
 import okhttp3.Request;
 import okhttp3.Response;
@@ -45,8 +47,8 @@ public class BeelineParser implements SectionParser {
 
         Request request = new Request.Builder()
                 .url(JOB_LIST_URL)
-                .addHeader("User-Agent", "PostmanRuntime/7.43.2")
-                .addHeader("Accept", "*/*")
+                .addHeader("User-Agent", HttpConstants.USER_AGENT)
+                .addHeader("Accept", HttpConstants.ACCEPT)
                 .addHeader("Accept-Encoding", "gzip, deflate, br")
                 .addHeader("Host", "job.beeline.ru")
                 .build();
@@ -55,7 +57,7 @@ public class BeelineParser implements SectionParser {
                 Response response = okHttpClient.newCall(request).execute();
 
                 if (!response.isSuccessful()) {
-                    throw new UnsupportedOperationException("Beeline parser is not working");
+                    throw new HttpServerErrorException(HttpStatusCode.valueOf(response.code()));
                 }
 
                 String responseBody = Objects.requireNonNull(response.body()).string();
@@ -70,8 +72,8 @@ public class BeelineParser implements SectionParser {
                                     okHttpClient.newCall(
                                             new Request.Builder()
                                                     .url(JOB_BASIC_API_URL.formatted(vacId))
-                                                    .addHeader("User-Agent", "PostmanRuntime/7.43.2")
-                                                    .addHeader("Accept", "*/*")
+                                                    .addHeader("User-Agent", HttpConstants.USER_AGENT)
+                                                    .addHeader("Accept", HttpConstants.ACCEPT)
                                                     .addHeader("Accept-Encoding", "gzip, deflate, br")
                                                     .addHeader("Host", "job.beeline.ru")
                                                     .build())
@@ -100,8 +102,8 @@ public class BeelineParser implements SectionParser {
 
                 return vacancies;
 
-            } catch (IOException e) {
-                throw new RuntimeException(e);
+            } catch (Exception e) {
+                throw new ParserException(this, e);
             }
     }
 

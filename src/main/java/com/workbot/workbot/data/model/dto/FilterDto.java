@@ -27,6 +27,13 @@ public class FilterDto {
         keywords = new HashSet<>();
     }
 
+    public FilterDto(Set<String> keywords, Area area, Set<Company> companies, LocalDateTime date) {
+        this.keywords = keywords.stream().map(TelegramSafeString::new).collect(Collectors.toSet());
+        this.area = area;
+        this.companies = companies;
+        this.date = date;
+    }
+
     public FilterDto(Filter filter) {
         this.id = filter.getId();
         this.keywords = filter.getKeywords().stream().map(TelegramSafeString::new)
