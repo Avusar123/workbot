@@ -1,12 +1,10 @@
 package com.workbot.workbot.telegram.process;
 
+import com.workbot.workbot.logic.update.section.util.UpdateStatusHolder;
 import com.workbot.workbot.telegram.handle.HandlerEntrypoint;
 import com.workbot.workbot.telegram.handle.handler.CancelOperationHandler;
 import com.workbot.workbot.telegram.setup.extractor.Extractor;
-import com.workbot.workbot.telegram.setup.intent.DelegatedMessageUpdateIntent;
-import com.workbot.workbot.telegram.setup.intent.PaginationUpdateIntent;
-import com.workbot.workbot.telegram.setup.intent.TextMessageUpdateIntent;
-import com.workbot.workbot.telegram.setup.intent.UpdateIntent;
+import com.workbot.workbot.telegram.setup.intent.*;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -18,8 +16,8 @@ import org.telegram.telegrambots.meta.exceptions.TelegramApiException;
 import org.telegram.telegrambots.meta.exceptions.TelegramApiRequestException;
 
 @Component
-public class UpdateProcessor {
-    private static final Logger log = LoggerFactory.getLogger(UpdateProcessor.class);
+public class TelegramProcessor {
+    private static final Logger log = LoggerFactory.getLogger(TelegramProcessor.class);
     @Autowired
     private Extractor<UpdateIntent> updateIntentExtractor;
 
@@ -31,6 +29,9 @@ public class UpdateProcessor {
 
     @Autowired
     private CancelOperationHandler cancelOperationHandler;
+
+    @Autowired
+    private UpdateStatusHolder updateStatusHolder;
 
     public void process(Update update) throws TelegramApiException {
         try {
@@ -49,6 +50,14 @@ public class UpdateProcessor {
                 cancelOperationHandler.cancel(delegatedMessageUpdateIntent.getUserId(), delegatedMessageUpdateIntent.getSourceMessageId());
 
                 intent = textMessageUpdateIntent;
+            }
+
+            if (intent instanceof CallbackUpdateIntent callbackUpdateIntent && updateStatusHolder.isProcessing()) {
+                AnswerCallbackQuery answerCallbackQuery = new AnswerCallbackQuery(callbackUpdateIntent.getQueryId());
+
+                answerCallbackQuery.setText("Отклик бота может быть снижен! Происходит обновление вакансий!");
+
+                telegramClient.execute(answerCallbackQuery);
             }
 
 

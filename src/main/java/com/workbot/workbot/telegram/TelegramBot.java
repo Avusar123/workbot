@@ -1,6 +1,6 @@
 package com.workbot.workbot.telegram;
 
-import com.workbot.workbot.telegram.process.UpdateProcessor;
+import com.workbot.workbot.telegram.process.TelegramProcessor;
 import com.workbot.workbot.telegram.setup.context.UpdateContext;
 import com.workbot.workbot.telegram.setup.context.UpdateContextHolder;
 import com.workbot.workbot.telegram.setup.extractor.Extractor;
@@ -26,7 +26,7 @@ public class TelegramBot implements LongPollingSingleThreadUpdateConsumer {
     private Extractor<UpdateContext> contextExtractor;
 
     @Autowired
-    private UpdateProcessor updateProcessor;
+    private TelegramProcessor telegramProcessor;
 
     @Autowired
     private UpdateContextHolder contextHolder;
@@ -52,7 +52,7 @@ public class TelegramBot implements LongPollingSingleThreadUpdateConsumer {
         try {
             lock.lock();
 
-            updateProcessor.process(update);
+            telegramProcessor.process(update);
 
         } catch (TelegramApiException e) {
             throw new RuntimeException(e);
