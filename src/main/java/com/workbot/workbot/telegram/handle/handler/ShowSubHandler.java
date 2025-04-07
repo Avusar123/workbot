@@ -1,6 +1,5 @@
 package com.workbot.workbot.telegram.handle.handler;
 
-import com.workbot.workbot.data.model.dto.FilterDto;
 import com.workbot.workbot.data.model.dto.SubscriptionDto;
 import com.workbot.workbot.logic.service.sub.SubService;
 import com.workbot.workbot.telegram.handle.handler.util.FilterUtil;

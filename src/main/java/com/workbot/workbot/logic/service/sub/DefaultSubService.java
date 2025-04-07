@@ -2,13 +2,11 @@ package com.workbot.workbot.logic.service.sub;
 
 import com.workbot.workbot.data.model.Filter;
 import com.workbot.workbot.data.model.Subscription;
-import com.workbot.workbot.data.model.UserModel;
 import com.workbot.workbot.data.model.dto.SubscriptionDto;
 import com.workbot.workbot.data.model.dto.VacancyDto;
 import com.workbot.workbot.data.repo.SubRepo;
 import com.workbot.workbot.data.repo.UserRepo;
 import com.workbot.workbot.data.repo.criteria.SubByVacancySpecification;
-import com.workbot.workbot.logic.service.user.UserService;
 import jakarta.transaction.Transactional;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;

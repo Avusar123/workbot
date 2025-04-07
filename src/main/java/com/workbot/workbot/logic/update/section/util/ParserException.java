@@ -1,7 +1,5 @@
 package com.workbot.workbot.logic.update.section.util;
 
-import com.workbot.workbot.data.model.Area;
-import com.workbot.workbot.data.model.Company;
 import com.workbot.workbot.logic.update.section.SectionParser;
 
 public class ParserException extends RuntimeException {

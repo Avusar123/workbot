@@ -7,7 +7,6 @@ import com.workbot.workbot.telegram.setup.context.data.FilterCacheData;
 import com.workbot.workbot.telegram.setup.intent.DelegatedMessageUpdateIntent;
 import com.workbot.workbot.telegram.setup.intent.MessageUpdateIntent;
 import com.workbot.workbot.telegram.setup.intent.type.HandlerType;
-import com.workbot.workbot.telegram.setup.redis.ChatDelegatedMessagesRepo;
 import com.workbot.workbot.telegram.setup.redis.DataRepo;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;

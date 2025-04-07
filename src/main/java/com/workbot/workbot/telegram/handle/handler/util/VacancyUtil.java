@@ -1,7 +1,6 @@
 package com.workbot.workbot.telegram.handle.handler.util;
 
 import com.workbot.workbot.data.model.dto.VacancyDto;
-import org.telegram.telegrambots.meta.api.objects.replykeyboard.InlineKeyboardMarkup;
 import org.telegram.telegrambots.meta.api.objects.replykeyboard.buttons.InlineKeyboardButton;
 import org.telegram.telegrambots.meta.api.objects.replykeyboard.buttons.InlineKeyboardRow;
 

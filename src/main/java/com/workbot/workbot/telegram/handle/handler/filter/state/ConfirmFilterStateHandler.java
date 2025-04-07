@@ -1,10 +1,8 @@
 package com.workbot.workbot.telegram.handle.handler.filter.state;
 
-import com.workbot.workbot.data.model.dto.FilterDto;
 import com.workbot.workbot.telegram.handle.handler.util.CancelUtil;
 import com.workbot.workbot.telegram.handle.handler.util.FilterUtil;
 import com.workbot.workbot.telegram.setup.context.data.FilterCacheData;
-import com.workbot.workbot.telegram.setup.intent.CallbackUpdateIntent;
 import com.workbot.workbot.telegram.setup.intent.MessageUpdateIntent;
 import com.workbot.workbot.telegram.setup.intent.type.CallbackType;
 import org.springframework.stereotype.Component;
@@ -15,7 +13,6 @@ import org.telegram.telegrambots.meta.api.objects.replykeyboard.buttons.InlineKe
 import org.telegram.telegrambots.meta.api.objects.replykeyboard.buttons.InlineKeyboardRow;
 import org.telegram.telegrambots.meta.exceptions.TelegramApiException;
 
-import java.time.format.DateTimeFormatter;
 import java.util.List;
 
 @Component

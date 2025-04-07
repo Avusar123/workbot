@@ -1,10 +1,8 @@
 package com.workbot.workbot.telegram.setup.config;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
-import com.fasterxml.jackson.datatype.jsr310.JavaTimeModule;
 import com.workbot.workbot.telegram.setup.context.data.CacheData;
 import com.workbot.workbot.telegram.setup.redis.PaginationContext;
-import jakarta.persistence.criteria.CriteriaBuilder;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.data.redis.connection.RedisConnectionFactory;

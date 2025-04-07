@@ -2,7 +2,6 @@ package com.workbot.workbot.telegram.process;
 
 import com.workbot.workbot.telegram.handle.HandlerEntrypoint;
 import com.workbot.workbot.telegram.setup.event.CustomIntentEvent;
-import com.workbot.workbot.telegram.setup.intent.UpdateIntent;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.event.EventListener;
 import org.springframework.stereotype.Component;

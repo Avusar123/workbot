@@ -7,19 +7,19 @@ import com.workbot.workbot.logic.update.section.SectionParser;
 import com.workbot.workbot.logic.update.section.util.HttpConstants;
 import com.workbot.workbot.logic.update.section.util.ParserException;
 import org.jsoup.Jsoup;
+import org.jsoup.nodes.Element;
 import org.springframework.stereotype.Service;
 
 import java.time.LocalDateTime;
 import java.util.HashSet;
 import java.util.Set;
+import java.util.stream.Collectors;
 
 @Service
-public class CrokParser implements SectionParser {
-    private static final String ALL_VACANCIES_URL = "https://careers.croc.ru/vacancies/";
+public class CinimexParser implements SectionParser {
+    private static final String VACANCIES_URL =  "https://cinimex.ru/vacancies/moscow";
 
-    private static final String VACANCY_BASE_URL = "https://careers.croc.ru%s";
-
-    private static final String SECTION_VACANCIES_BASE = "https://careers.croc.ru/vacancies/%s";
+    private static final String BASE_URL = "https://cinimex.ru%s";
 
     @Override
     public Set<VacancyDto> parse() {
@@ -27,61 +27,65 @@ public class CrokParser implements SectionParser {
 
         try {
             var result = Jsoup
-                    .connect(ALL_VACANCIES_URL)
+                    .connect(VACANCIES_URL)
                     .userAgent(HttpConstants.USER_AGENT)
                     .get();
 
-            var sectionLists = result.getElementsByClass("vacancy__card-all")
+            var links = result.getElementsByClass("vacancy-city")
+                    .first()
+                    .getElementsByTag("a")
                     .stream()
-                    .map(
-                            card -> card.attr("href"))
+                    .map(l -> l.attr("href"))
                     .toList();
 
-            for (var sectionList : sectionLists) {
-                var sectionResults = Jsoup
-                        .connect(SECTION_VACANCIES_BASE.formatted(sectionList))
+            for (var link : links) {
+                var cityResult = Jsoup
+                        .connect(BASE_URL.formatted(link))
                         .userAgent(HttpConstants.USER_AGENT)
                         .get();
 
-                var vacLinks = sectionResults
-                        .getElementsByClass("vacancy__card-item")
+                var vacLinks = cityResult.getElementsByClass("vacancy")
                         .stream()
-                        .map(vac -> vac
-                                .getElementsByTag("a")
-                                .first()
-                                .attr("href"))
+                        .map(vac ->
+                                vac.getElementsByTag("a")
+                                        .first()
+                                        .attr("href"))
                         .toList();
 
                 for (var vacLink : vacLinks) {
                     var vacResult = Jsoup
-                            .connect(VACANCY_BASE_URL.formatted(vacLink))
+                            .connect(BASE_URL.formatted(vacLink))
                             .userAgent(HttpConstants.USER_AGENT)
                             .get();
 
-                    var main = vacResult.getElementsByClass("vacancy-detail__content-main").first();
 
-                    var title = main.getElementsByTag("h1").first().text();
+                    var title = vacResult.getElementsByTag("h3").first().text();
 
-                    var desc = main.html();
+                    var desc = vacResult
+                            .getElementsByTag("section")
+                            .select("ul")
+                            .stream()
+                            .map(Element::html)
+                            .collect(Collectors.joining("\n"));
 
                     vacancies.add(
                             new VacancyDto(
                                     title,
                                     desc,
-                                    VACANCY_BASE_URL.formatted(vacLink),
+                                    BASE_URL.formatted(vacLink),
                                     LocalDateTime.now(),
                                     Area.IT,
-                                    Company.CROK
+                                    Company.CINIMEX
                             )
                     );
                 }
             }
 
-            return vacancies;
-
         } catch (Exception e) {
             throw new ParserException(this, e);
         }
+
+        return vacancies;
     }
 
     @Override
@@ -91,6 +95,6 @@ public class CrokParser implements SectionParser {
 
     @Override
     public Company getCompany() {
-        return Company.CROK;
+        return Company.CINIMEX;
     }
 }

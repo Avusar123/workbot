@@ -3,7 +3,6 @@ package com.workbot.workbot.update.parser;
 import com.workbot.workbot.logic.json.JsonConfiguration;
 import com.workbot.workbot.logic.update.UpdateConfig;
 import com.workbot.workbot.logic.update.section.impl.BeelineParser;
-import com.workbot.workbot.telegram.TelegramBot;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;

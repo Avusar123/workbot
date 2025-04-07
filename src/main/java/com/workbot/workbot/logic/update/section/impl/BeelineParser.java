@@ -1,6 +1,5 @@
 package com.workbot.workbot.logic.update.section.impl;
 
-import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.workbot.workbot.data.model.Area;
 import com.workbot.workbot.data.model.Company;
@@ -12,20 +11,12 @@ import okhttp3.OkHttpClient;
 import okhttp3.Request;
 import okhttp3.Response;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.http.HttpStatusCode;
 import org.springframework.stereotype.Service;
-import org.springframework.web.client.HttpServerErrorException;
-import org.springframework.web.reactive.function.client.ClientResponse;
-import org.springframework.web.reactive.function.client.WebClient;
 
-import java.io.FileReader;
-import java.io.IOException;
 import java.time.LocalDateTime;
 import java.util.HashSet;
 import java.util.Objects;
-import java.util.Random;
 import java.util.Set;
-import java.util.function.Function;
 
 @Service
 public class BeelineParser implements SectionParser {
@@ -57,7 +48,7 @@ public class BeelineParser implements SectionParser {
                 Response response = okHttpClient.newCall(request).execute();
 
                 if (!response.isSuccessful()) {
-                    throw new HttpServerErrorException(HttpStatusCode.valueOf(response.code()));
+                    throw new IllegalStateException("Request is not successful");
                 }
 
                 String responseBody = Objects.requireNonNull(response.body()).string();
