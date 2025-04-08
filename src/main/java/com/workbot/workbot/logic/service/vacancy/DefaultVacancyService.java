@@ -17,6 +17,7 @@ import org.springframework.context.ApplicationEventPublisher;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageImpl;
 import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
 import org.springframework.validation.annotation.Validated;
 
@@ -61,7 +62,7 @@ public class DefaultVacancyService implements VacancyService {
                                      @Positive int maxOnPage, @PositiveOrZero int page) {
         var vacancies = repo.findAll(
                 new VacancyByFilterSpecification(filter),
-                PageRequest.of(page, maxOnPage)
+                PageRequest.of(page, maxOnPage, Sort.by("added").descending())
         );
 
         List<VacancyDto> vacancyDtos = vacancies.getContent()

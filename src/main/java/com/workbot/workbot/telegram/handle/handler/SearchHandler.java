@@ -23,6 +23,7 @@ import org.telegram.telegrambots.meta.api.objects.replykeyboard.buttons.InlineKe
 import org.telegram.telegrambots.meta.api.objects.replykeyboard.buttons.InlineKeyboardRow;
 import org.telegram.telegrambots.meta.exceptions.TelegramApiException;
 
+import java.util.ArrayList;
 import java.util.List;
 
 @Component
@@ -83,7 +84,7 @@ public class SearchHandler {
         } else {
             var vacancy = result.get().findFirst().orElseThrow();
 
-            var rows = new java.util.ArrayList<>(VacancyUtil.generateMarkupRows(vacancy));
+            var rows = new ArrayList<>(VacancyUtil.generateMarkupRows(vacancy));
 
             rows.add(PaginationUtil.paginationRow(result));
 
