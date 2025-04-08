@@ -53,16 +53,6 @@ public class TelegramProcessor {
                 intent = textMessageUpdateIntent;
             }
 
-            if ((intent instanceof CallbackUpdateIntent || intent instanceof PaginationUpdateIntent) && updateStatusHolder.isProcessing()) {
-                AnswerCallbackQuery answerCallbackQuery = getAnswerCallbackQuery(intent);
-
-                telegramClient.execute(answerCallbackQuery);
-
-                updateStatusHolder.addUser(((MessageUpdateIntent) intent).getUserId());
-
-                return;
-            }
-
             try {
                 handlerEntrypoint.handle(intent);
             } catch (TelegramApiRequestException requestException) {
@@ -71,6 +61,14 @@ public class TelegramProcessor {
                 } else {
                     throw requestException;
                 }
+            }
+
+            if ((intent instanceof CallbackUpdateIntent || intent instanceof PaginationUpdateIntent) && updateStatusHolder.isProcessing()) {
+                AnswerCallbackQuery answerCallbackQuery = getAnswerCallbackQuery(intent);
+
+                telegramClient.execute(answerCallbackQuery);
+
+                updateStatusHolder.addUser(((MessageUpdateIntent) intent).getUserId());
             }
 
         } catch (IllegalArgumentException ex) {
@@ -101,11 +99,10 @@ public class TelegramProcessor {
 
         answerCallbackQuery.setText(getTimeoutMessage());
 
-        answerCallbackQuery.setShowAlert(true);
         return answerCallbackQuery;
     }
 
     private String getTimeoutMessage() {
-        return "Бот приостановлен на время обновления вакансий! Сообщим, когда обновление завершится в этом чате.";
+        return "Обновление вакансий! Сообщим, когда будет готово";
     }
 }
