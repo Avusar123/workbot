@@ -1,5 +1,6 @@
 package com.workbot.workbot.logic.update.section.impl;
 
+import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.workbot.workbot.data.model.Area;
 import com.workbot.workbot.data.model.Company;
@@ -52,13 +53,15 @@ public class MTCParser implements SectionParser {
                 .build();
 
         try {
-            var response = okHttpClient.newCall(request).execute();
+            JsonNode json;
+            try (var response = okHttpClient.newCall(request).execute()) {
 
-            if (!response.isSuccessful()) {
-                throw new IllegalStateException("Request is not successful");
+                if (!response.isSuccessful()) {
+                    throw new IllegalStateException("Request is not successful");
+                }
+
+                json = objectMapper.readTree(Objects.requireNonNull(response.body()).string());
             }
-
-            var json = objectMapper.readTree(Objects.requireNonNull(response.body()).string());
 
             var vacanciesJson = json.get("data").get("vacancies");
 
@@ -70,18 +73,20 @@ public class MTCParser implements SectionParser {
                         .get()
                         .build();
 
-                var vacResult = okHttpClient.newCall(vacRequest).execute();
+                JsonNode vacData;
+                try (var vacResult = okHttpClient.newCall(vacRequest).execute()) {
 
-                if (!vacResult.isSuccessful()) {
-                    throw new IllegalStateException("Request is not successful");
+                    if (!vacResult.isSuccessful()) {
+                        throw new IllegalStateException("Request is not successful");
+                    }
+
+                    vacData = objectMapper
+                            .readTree(Objects.requireNonNull(
+                                            vacResult.body())
+                                    .string())
+                            .get("data")
+                            .get("vacancy");
                 }
-
-                var vacData = objectMapper
-                        .readTree(Objects.requireNonNull(
-                                vacResult.body())
-                                .string())
-                        .get("data")
-                        .get("vacancy");
 
                 var title = vacData.get("name").asText();
 

@@ -5,6 +5,7 @@ import com.workbot.workbot.telegram.handle.HandlerEntrypoint;
 import com.workbot.workbot.telegram.handle.handler.CancelOperationHandler;
 import com.workbot.workbot.telegram.setup.extractor.Extractor;
 import com.workbot.workbot.telegram.setup.intent.*;
+import org.jetbrains.annotations.NotNull;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -52,14 +53,15 @@ public class TelegramProcessor {
                 intent = textMessageUpdateIntent;
             }
 
-            if (intent instanceof CallbackUpdateIntent callbackUpdateIntent && updateStatusHolder.isProcessing()) {
-                AnswerCallbackQuery answerCallbackQuery = new AnswerCallbackQuery(callbackUpdateIntent.getQueryId());
-
-                answerCallbackQuery.setText("Отклик бота может быть снижен! Происходит обновление вакансий!");
+            if ((intent instanceof CallbackUpdateIntent || intent instanceof PaginationUpdateIntent) && updateStatusHolder.isProcessing()) {
+                AnswerCallbackQuery answerCallbackQuery = getAnswerCallbackQuery(intent);
 
                 telegramClient.execute(answerCallbackQuery);
-            }
 
+                updateStatusHolder.addUser(((MessageUpdateIntent) intent).getUserId());
+
+                return;
+            }
 
             try {
                 handlerEntrypoint.handle(intent);
@@ -82,5 +84,28 @@ public class TelegramProcessor {
                         5));
             }
         }
+    }
+
+    @NotNull
+    private AnswerCallbackQuery getAnswerCallbackQuery(UpdateIntent intent) {
+        String  queryId;
+
+        if (intent instanceof CallbackUpdateIntent callbackUpdateIntent) {
+            queryId = callbackUpdateIntent.getQueryId();
+        } else {
+            PaginationUpdateIntent paginationUpdateIntent = (PaginationUpdateIntent) intent;
+            queryId = paginationUpdateIntent.getQueryId();
+        }
+
+        AnswerCallbackQuery answerCallbackQuery = new AnswerCallbackQuery(queryId);
+
+        answerCallbackQuery.setText(getTimeoutMessage());
+
+        answerCallbackQuery.setShowAlert(true);
+        return answerCallbackQuery;
+    }
+
+    private String getTimeoutMessage() {
+        return "Бот приостановлен на время обновления вакансий! Сообщим, когда обновление завершится в этом чате.";
     }
 }

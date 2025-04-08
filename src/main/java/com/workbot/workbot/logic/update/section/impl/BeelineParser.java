@@ -45,33 +45,39 @@ public class BeelineParser implements SectionParser {
                 .build();
 
             try {
-                Response response = okHttpClient.newCall(request).execute();
+                String responseBody;
+                try (Response response = okHttpClient.newCall(request).execute()) {
 
-                if (!response.isSuccessful()) {
-                    throw new IllegalStateException("Request is not successful");
+                    if (!response.isSuccessful()) {
+                        throw new IllegalStateException("Request is not successful");
+                    }
+
+                    responseBody = Objects.requireNonNull(response.body()).string();
                 }
-
-                String responseBody = Objects.requireNonNull(response.body()).string();
 
                 var vacanciesNode = objectMapper.readTree(responseBody).get("results");
 
                 for (var vacNode : vacanciesNode) {
                     var vacId = Objects.requireNonNull(vacNode.get("id").asText());
 
-                    var vacResult = objectMapper.readTree(
-                            Objects.requireNonNull(
-                                    okHttpClient.newCall(
-                                            new Request.Builder()
-                                                    .url(JOB_BASIC_API_URL.formatted(vacId))
-                                                    .addHeader("User-Agent", HttpConstants.USER_AGENT)
-                                                    .addHeader("Accept", HttpConstants.ACCEPT)
-                                                    .addHeader("Accept-Encoding", "gzip, deflate, br")
-                                                    .addHeader("Host", "job.beeline.ru")
-                                                    .build())
-                                            .execute()
-                                    )
-                                    .body()
-                                    .string());
+                    String vacBody;
+
+                    try (var vacResponse = okHttpClient.newCall(new Request.Builder()
+                                            .url(JOB_BASIC_API_URL.formatted(vacId))
+                                            .addHeader("User-Agent", HttpConstants.USER_AGENT)
+                                            .addHeader("Accept", HttpConstants.ACCEPT)
+                                            .addHeader("Accept-Encoding", "gzip, deflate, br")
+                                            .addHeader("Host", "job.beeline.ru")
+                                            .build()).execute()
+                    ) {
+                        if (!vacResponse.isSuccessful()) {
+                            throw new IllegalStateException("Request is not successful");
+                        }
+
+                        vacBody = Objects.requireNonNull(vacResponse.body()).string();
+                    }
+
+                    var vacResult = objectMapper.readTree(vacBody);
 
                     var title = Objects.requireNonNull(vacResult.get("name").asText());
 

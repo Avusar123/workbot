@@ -40,6 +40,8 @@ public class PaginationIntentExtractor implements Extractor<PaginationUpdateInte
 
         var userId = update.getCallbackQuery().getFrom().getId();
 
+        var queryId = update.getCallbackQuery().getId();
+
         if (!paginationRepo.contains(userId, messageId)) {
             throw new IllegalArgumentException("This message does not contains pagination");
         }
@@ -50,6 +52,7 @@ public class PaginationIntentExtractor implements Extractor<PaginationUpdateInte
                 update.getCallbackQuery().getMessage().getMessageId(),
                 update.getCallbackQuery().getFrom().getId(),
                 context,
+                queryId,
                 targetPage
         );
     }
