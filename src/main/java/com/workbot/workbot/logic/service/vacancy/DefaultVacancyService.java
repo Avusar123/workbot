@@ -58,6 +58,7 @@ public class DefaultVacancyService implements VacancyService {
     }
 
     @Override
+    @Transactional
     public Page<VacancyDto> getAllBy(FilterDto filter,
                                      @Positive int maxOnPage, @PositiveOrZero int page) {
         var vacancies = repo.findAll(

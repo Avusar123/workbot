@@ -4,11 +4,12 @@ import com.workbot.workbot.data.model.dto.util.TelegramSafeString;
 
 public enum Company {
     BEELINE("Билайн"),
-    TINKOFF("Т-Банк"),
+    TINKOFF("Т Банк"),
     CINIMEX("Синимекс"),
     CROK("КРОК"),
     MTC("МТС"),
-    SBER("Сбер");
+    SBER("Сбер"),
+    DIS_GROUP("Дис групп");
 
     private final String displayName;
 
