@@ -1,6 +1,8 @@
 package com.workbot.workbot.data.model;
 
 
+import com.workbot.workbot.data.model.dto.util.TelegramSafeString;
+
 public enum Area {
     IT("IT");
 
@@ -11,6 +13,6 @@ public enum Area {
     }
 
     public String getDisplayName() {
-        return displayName;
+        return TelegramSafeString.escapeMarkdownV2(displayName);
     }
 }

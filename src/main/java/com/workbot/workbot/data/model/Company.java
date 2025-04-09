@@ -1,5 +1,7 @@
 package com.workbot.workbot.data.model;
 
+import com.workbot.workbot.data.model.dto.util.TelegramSafeString;
+
 public enum Company {
     BEELINE("Билайн"),
     TINKOFF("Т-Банк"),
@@ -15,6 +17,6 @@ public enum Company {
     }
 
     public String getDisplayName() {
-        return displayName;
+        return TelegramSafeString.escapeMarkdownV2(displayName);
     }
 }
