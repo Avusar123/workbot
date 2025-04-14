@@ -10,6 +10,6 @@ import org.springframework.stereotype.Repository;
 
 @Repository
 public interface UserRepo extends JpaRepository<UserModel, Long> {
-    @Query("SELECT s FROM UserModel u JOIN u.subscriptions s")
+    @Query("SELECT s FROM UserModel u JOIN u.subscriptions s WHERE u.id = :userId")
     Page<Subscription> findSubsByUser(long userId, Pageable pageable);
 }
