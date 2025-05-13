@@ -31,6 +31,5 @@ build/
 
 ### VS Code ###
 .vscode/
-/.docker-compose.yaml.swp
 /app.jar
-/docker-compose.yaml
+/.env

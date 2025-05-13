@@ -1,0 +1,45 @@
+version: '3.8'
+
+services:
+  app:
+    image: avusar/workbot
+    ports:
+      - "8080:8080"
+    environment:
+      - tg.admin=${TG_ADMIN}
+      - tg.token=${TG_TOKEN}
+      - spring.data.redis.host=redis
+      - spring.data.redis.port=6379
+      - spring.datasource.url=jdbc:postgresql://db:5432/db
+      - spring.datasource.username=sa
+      - spring.datasource.password=password
+      - spring.datasource.driver-class-name=org.postgresql.Driver
+      - spring.datasource.platform=postgres
+      - spring.jpa.show-sql=true
+      - spring.jpa.properties.hibernate.format_sql=true
+      - spring.jpa.hibernate.ddl-auto=create
+    links:
+      - redis
+    depends_on:
+      - redis
+      - db
+  redis:
+    image: redis:latest
+    container_name: redis
+    ports:
+      - "6379:6379"
+
+  db:
+    image: postgres:latest
+    environment:
+      - POSTGRES_USER=sa
+      - POSTGRES_PASSWORD=password
+      - POSTGRES_DB=db
+    ports:
+      - "5432:5432"
+    volumes:
+      - postgres_data:/var/lib/postgresql/data
+
+volumes:
+  postgres_data:
+    driver: local
