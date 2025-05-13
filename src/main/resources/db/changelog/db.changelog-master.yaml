@@ -103,8 +103,6 @@ databaseChangeLog:
               - column:
                   name: user_id
                   type: bigint
-                  constraints:
-                    nullable: false
               - column:
                   name: title
                   type: varchar(255)
