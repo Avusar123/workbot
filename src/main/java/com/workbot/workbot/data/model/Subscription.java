@@ -5,15 +5,17 @@ import jakarta.persistence.*;
 @Entity
 public class Subscription {
     @Id
-    @GeneratedValue
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     int id;
 
     String title;
 
     @OneToOne(cascade = CascadeType.ALL)
+    @JoinColumn(name = "filter_id", nullable = false)
     Filter filter;
 
     @ManyToOne
+    @JoinColumn(name = "user_id", nullable = false)
     UserModel user;
 
     public Subscription(String title, Filter filter) {

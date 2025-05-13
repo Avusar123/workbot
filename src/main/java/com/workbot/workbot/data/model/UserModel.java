@@ -1,16 +1,16 @@
 package com.workbot.workbot.data.model;
 
-import jakarta.persistence.Entity;
-import jakarta.persistence.Id;
-import jakarta.persistence.OneToMany;
+import jakarta.persistence.*;
 
 import java.util.ArrayList;
 import java.util.List;
 
 @Entity
+@Table(name = "user_model")
 public class UserModel {
     @Id
-    long id;
+    @Column(name = "id")
+    private Long id;
 
     @OneToMany(mappedBy = "user")
     List<Subscription> subscriptions;

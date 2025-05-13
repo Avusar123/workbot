@@ -11,16 +11,27 @@ import java.util.stream.Collectors;
 @Entity
 public class Filter {
     @Id
-    @GeneratedValue
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     int id;
 
     @ElementCollection
+    @CollectionTable(
+            name = "filter_keywords",
+            joinColumns = @JoinColumn(name = "filter_id")
+    )
+    @Column(name = "keyword")
     Set<String> keywords;
 
     @Enumerated(EnumType.STRING)
     Area area;
 
     @ElementCollection
+    @CollectionTable(
+            name = "filter_companies",
+            joinColumns = @JoinColumn(name = "filter_id")
+    )
+    @Column(name = "company")
+    @Enumerated(EnumType.STRING)
     Set<Company> companies;
 
     LocalDateTime date;

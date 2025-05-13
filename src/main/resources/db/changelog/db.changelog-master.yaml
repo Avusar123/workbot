@@ -1,0 +1,208 @@
+databaseChangeLog:
+  - changeSet:
+      id: 1
+      author: dev
+      changes:
+        - createTable:
+            tableName: user_model
+            columns:
+              - column:
+                  name: id
+                  type: bigint
+                  constraints:
+                    primaryKey: true
+
+        - createTable:
+            tableName: filter
+            columns:
+              - column:
+                  name: id
+                  type: integer
+                  autoIncrement: true
+                  constraints:
+                    primaryKey: true
+              - column:
+                  name: date
+                  type: timestamp
+                  constraints:
+                    nullable: false
+              - column:
+                  name: area
+                  type: varchar(255)
+                  constraints:
+                    nullable: false
+
+        - createTable:
+            tableName: filter_keywords
+            columns:
+              - column:
+                  name: filter_id
+                  type: int
+                  constraints:
+                    nullable: false
+              - column:
+                  name: keyword
+                  type: varchar(255)
+                  constraints:
+                    nullable: false
+
+        - addPrimaryKey:
+            tableName: filter_keywords
+            columnNames: filter_id, keyword
+            constraintName: pk_filter_keywords
+
+        - addForeignKeyConstraint:
+            baseTableName: filter_keywords
+            baseColumnNames: filter_id
+            referencedTableName: filter
+            referencedColumnNames: id
+            constraintName: fk_filter_keywords_filter
+            onDelete: CASCADE
+
+        - createTable:
+            tableName: filter_companies
+            columns:
+              - column:
+                  name: filter_id
+                  type: int
+                  constraints:
+                    nullable: false
+              - column:
+                  name: company
+                  type: varchar(255)
+                  constraints:
+                    nullable: false
+
+        - addPrimaryKey:
+            tableName: filter_companies
+            columnNames: filter_id, company
+            constraintName: pk_filter_companies
+
+        - addForeignKeyConstraint:
+            baseTableName: filter_companies
+            baseColumnNames: filter_id
+            referencedTableName: filter
+            referencedColumnNames: id
+            constraintName: fk_filter_companies_filter
+            onDelete: CASCADE
+
+        - createTable:
+            tableName: subscription
+            columns:
+              - column:
+                  name: id
+                  type: integer
+                  autoIncrement: true
+                  constraints:
+                    primaryKey: true
+              - column:
+                  name: filter_id
+                  type: integer
+                  constraints:
+                    nullable: false
+              - column:
+                  name: user_id
+                  type: bigint
+                  constraints:
+                    nullable: false
+              - column:
+                  name: title
+                  type: varchar(255)
+                  constraints:
+                    nullable: false
+
+        - addForeignKeyConstraint:
+            baseTableName: subscription
+            baseColumnNames: filter_id
+            referencedTableName: filter
+            referencedColumnNames: id
+            constraintName: fk_subscription_filter
+
+        - addForeignKeyConstraint:
+            baseTableName: subscription
+            baseColumnNames: user_id
+            referencedTableName: user_model
+            referencedColumnNames: id
+            constraintName: fk_subscription_user
+  - changeSet:
+      id: 2
+      author: dev
+      context: dev
+      changes:
+        - createTable:
+            tableName: vacancy
+            columns:
+              - column:
+                  name: id
+                  type: UUID
+                  constraints:
+                    primaryKey: true
+              - column:
+                  name: title
+                  type: varchar(255)
+                  constraints:
+                    nullable: false
+              - column:
+                  name: link
+                  type: varchar(255)
+                  constraints:
+                    nullable: false
+              - column:
+                  name: added
+                  type: timestamp
+                  constraints:
+                    nullable: false
+              - column:
+                  name: area
+                  type: varchar(255)
+                  constraints:
+                    nullable: false
+              - column:
+                  name: company
+                  type: varchar(255)
+                  constraints:
+                    nullable: false
+              - column:
+                  name: description
+                  type: VARCHAR(10000)
+  - changeSet:
+      id: 3
+      author: dev
+      context: prod
+      changes:
+        - createTable:
+            tableName: vacancy
+            columns:
+              - column:
+                  name: id
+                  type: UUID
+                  constraints:
+                    primaryKey: true
+              - column:
+                  name: title
+                  type: varchar(255)
+                  constraints:
+                    nullable: false
+              - column:
+                  name: link
+                  type: varchar(255)
+                  constraints:
+                    nullable: false
+              - column:
+                  name: added
+                  type: timestamp
+                  constraints:
+                    nullable: false
+              - column:
+                  name: area
+                  type: varchar(255)
+                  constraints:
+                    nullable: false
+              - column:
+                  name: company
+                  type: varchar(255)
+                  constraints:
+                    nullable: false
+              - column:
+                  name: description
+                  type: TEXT
