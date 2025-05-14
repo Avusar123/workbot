@@ -12,7 +12,7 @@ public class AdminNotifyExecutor implements HandlerExecutor<AdminNotifyIntent> {
     @Autowired
     private AdminNotifyHandler adminNotifyHandler;
 
-    @Value("${tg.admin}")
+    @Value("${tg.admin:1}")
     private long adminId;
 
     @Override
