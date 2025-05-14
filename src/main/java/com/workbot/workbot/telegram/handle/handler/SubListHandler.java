@@ -5,7 +5,7 @@ import com.workbot.workbot.logic.service.user.UserService;
 import com.workbot.workbot.telegram.handle.handler.util.PaginationUtil;
 import com.workbot.workbot.telegram.setup.intent.type.CallbackType;
 import com.workbot.workbot.telegram.setup.intent.type.HandlerType;
-import com.workbot.workbot.telegram.setup.redis.PaginationContext;
+import com.workbot.workbot.telegram.setup.context.PaginationContext;
 import com.workbot.workbot.telegram.setup.redis.PaginationRepo;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;

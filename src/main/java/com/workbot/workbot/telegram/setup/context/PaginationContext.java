@@ -1,4 +1,4 @@
-package com.workbot.workbot.telegram.setup.redis;
+package com.workbot.workbot.telegram.setup.context;
 
 import com.workbot.workbot.telegram.setup.intent.type.HandlerType;
 

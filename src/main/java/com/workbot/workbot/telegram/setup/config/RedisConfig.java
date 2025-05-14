@@ -2,7 +2,7 @@ package com.workbot.workbot.telegram.setup.config;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.workbot.workbot.telegram.setup.context.data.CacheData;
-import com.workbot.workbot.telegram.setup.redis.PaginationContext;
+import com.workbot.workbot.telegram.setup.context.PaginationContext;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.data.redis.connection.RedisConnectionFactory;

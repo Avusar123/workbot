@@ -7,6 +7,8 @@ import com.workbot.workbot.telegram.setup.extractor.Extractor;
 import jakarta.annotation.PostConstruct;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
+import org.springframework.boot.autoconfigure.condition.ConditionalOnProperty;
+import org.springframework.context.annotation.Profile;
 import org.springframework.stereotype.Service;
 import org.telegram.telegrambots.longpolling.TelegramBotsLongPollingApplication;
 import org.telegram.telegrambots.longpolling.util.LongPollingSingleThreadUpdateConsumer;
@@ -18,6 +20,7 @@ import java.util.Map;
 import java.util.concurrent.locks.ReentrantLock;
 
 @Service
+@Profile("!test")
 public class TelegramBot implements LongPollingSingleThreadUpdateConsumer {
     @Autowired
     private TelegramBotsLongPollingApplication longPollingApplication;
